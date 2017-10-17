@@ -1,17 +1,16 @@
 package net.shtyftu.ubiquode.controller;
 
-import java.util.Date;
-import java.util.Map;
 import net.shtyftu.ubiquode.service.QuestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author shtyftu
  */
-@RestController
+@Controller
 public class UserQuestController {
 
     @Value("${application.message:Hello World}")
@@ -31,9 +30,9 @@ public class UserQuestController {
         return result ? "OK" : "FAIL";
     }
 
-    @RequestMapping("/")
-    public String welcome(Map<String, Object> model) {
-        model.put("message", this.message);
+    @RequestMapping("/foo")
+    public String welcome(Model model) {
+        model.addAttribute("message", this.message);
         return "welcome";
     }
 //
