@@ -1,9 +1,9 @@
-package net.shtyftu.ubiquode.model;
+package net.shtyftu.ubiquode.model.persist.simple;
 
 /**
  * @author shtyftu
  */
-public class QuestProto {
+public class QuestProto implements PersistEntity<String> {
 
     private String id;
     private String name;
@@ -15,6 +15,11 @@ public class QuestProto {
         this.name = name;
         this.cooldown = cooldown;
         this.deadline = deadline;
+    }
+
+    @Override
+    public String getKey() {
+        return id;
     }
 
     public String getId() {

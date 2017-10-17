@@ -1,4 +1,6 @@
-package net.shtyftu.ubiquode.model;
+package net.shtyftu.ubiquode.model.projection;
+
+import net.shtyftu.ubiquode.model.persist.simple.QuestProto;
 
 /**
  * @author shtyftu
@@ -23,23 +25,44 @@ public class QuestState {
         return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public Long getDeadlineAt() {
         return deadlineAt;
+    }
+
+    public void setDeadlineAt(Long deadlineAt) {
+        this.deadlineAt = deadlineAt;
     }
 
     public Long getCooldownTill() {
         return cooldownTill;
     }
 
+    public void setCooldownTill(Long cooldownTill) {
+        this.cooldownTill = cooldownTill;
+    }
+
     public State getState() {
         return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
     }
 
     public QuestProto getProto() {
         return proto;
     }
 
+    public void setProto(QuestProto proto) {
+        this.proto = proto;
+    }
+
     public enum State {
+        Disabled,
         Available,
         OnCooldown,
         LockedByUser
