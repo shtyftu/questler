@@ -7,10 +7,12 @@ import net.shtyftu.ubiquode.model.persist.simple.QuestProto;
 import net.shtyftu.ubiquode.model.projection.QuestState;
 import net.shtyftu.ubiquode.model.projection.QuestState.State;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @author shtyftu
  */
+@Component
 public class QuestStateProcessor extends Processor<QuestState, String, QuestEvent> {
 
     private final QuestProtoDao protoDao;

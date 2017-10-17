@@ -3,7 +3,6 @@ package net.shtyftu.ubiquode.service;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import net.shtyftu.ubiquode.dao.composite.event.QuestEventDao;
@@ -15,10 +14,12 @@ import net.shtyftu.ubiquode.processor.QuestStateProcessor;
 import net.shtyftu.ubiquode.model.projection.QuestState;
 import net.shtyftu.ubiquode.model.projection.QuestState.State;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * @author shtyftu
  */
+@Service
 public class QuestService {
 
     private static final long LOCK_TIME_MINUTES = TimeUnit.HOURS.toMinutes(3);

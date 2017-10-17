@@ -1,24 +1,12 @@
 package net.shtyftu.ubiquode;
 
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-/**
- * @author shtyftu
- */
+@SpringBootApplication
 public class QuestlerLifeServer {
 
-    private static final Logger log = LoggerFactory.getLogger(QuestlerLifeServer.class);
-
-    public static void main(String[] args) {
-        try {
-            SpringApplication.run(QuestlerLifeServer.class, args);
-        } catch (Exception e) {
-            log.error("Error while starting server", e);
-            System.exit(1);
-        }
+    public static void main(String[] args) throws Exception {
+        SpringApplication.run(QuestlerLifeServer.class, args);
     }
-
 }

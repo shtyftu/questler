@@ -6,10 +6,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import net.shtyftu.ubiquode.model.persist.simple.QuestProto;
+import org.springframework.stereotype.Component;
 
 /**
  * @author shtyftu
  */
+@Component
 public class QuestProtoDao implements Dao<QuestProto, String> {
 
     private Map<String, QuestProto> protos = new HashMap<String, QuestProto>(){{

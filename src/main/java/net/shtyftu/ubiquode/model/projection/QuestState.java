@@ -1,11 +1,12 @@
 package net.shtyftu.ubiquode.model.projection;
 
+import net.shtyftu.ubiquode.model.Model;
 import net.shtyftu.ubiquode.model.persist.simple.QuestProto;
 
 /**
  * @author shtyftu
  */
-public class QuestState {
+public class QuestState extends Model {
 
     private String id;
     private Long deadlineAt;
