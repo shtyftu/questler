@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @author shtyftu
@@ -25,7 +26,9 @@ public class UserQuestController {
     }
 
     @RequestMapping("/quest/lock")
-    public String lockQuest(String questId, String userId) {
+    public String lockQuest(
+            @RequestParam(name = "questId") String questId,
+            @RequestParam(name = "questId") String userId) {
         boolean result = questService.lock(questId, userId);
         return result ? "OK" : "FAIL";
     }
