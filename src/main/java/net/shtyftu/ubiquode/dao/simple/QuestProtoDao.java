@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component;
  * @author shtyftu
  */
 @Component
-public class QuestProtoDao extends HashMapDao<QuestProto, String> implements Dao<QuestProto, String> {
+public class QuestProtoDao extends HashMapDao<QuestProto> implements Dao<QuestProto> {
 
     public QuestProtoDao() {
-        save(new QuestProto("id1", "clean table", TimeUnit.HOURS.toMillis(6), TimeUnit.HOURS.toMillis(24)));
-        save(new QuestProto("id2", "move clothes", TimeUnit.HOURS.toMillis(12),TimeUnit.HOURS.toMillis(48)));
+        save(new QuestProto("id1", "clean table", TimeUnit.HOURS.toMillis(6), TimeUnit.HOURS.toMillis(24), 11));
+        save(new QuestProto("id2", "move clothes", TimeUnit.HOURS.toMillis(12),TimeUnit.HOURS.toMillis(48), 12));
     }
 }

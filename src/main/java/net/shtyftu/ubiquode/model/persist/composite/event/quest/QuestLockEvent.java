@@ -1,7 +1,7 @@
 package net.shtyftu.ubiquode.model.persist.composite.event.quest;
 
 import net.shtyftu.ubiquode.model.projection.QuestState;
-import net.shtyftu.ubiquode.model.projection.QuestState.State;
+import net.shtyftu.ubiquode.service.ConfigService;
 
 /**
  * @author shtyftu
@@ -17,7 +17,8 @@ public class QuestLockEvent extends QuestEvent {
 
     @Override
     public void applyTo(QuestState questState) {
-        questState.setState(State.LockedByUser);
+        final long now = System.currentTimeMillis();
+        questState.setLockedTill(now + ConfigService.QUEST_LOCK_TIME);
     }
 
 }

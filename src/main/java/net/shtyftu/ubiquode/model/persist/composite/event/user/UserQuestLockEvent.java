@@ -1,13 +1,14 @@
 package net.shtyftu.ubiquode.model.persist.composite.event.user;
 
 import net.shtyftu.ubiquode.model.persist.simple.User;
+import net.shtyftu.ubiquode.service.ConfigService;
 
 /**
  * @author shtyftu
  */
 public class UserQuestLockEvent extends UserEvent {
 
-    final String questId;
+    private final String questId;
 
     public UserQuestLockEvent(String userId, String questId) {
         super(userId);
@@ -16,6 +17,10 @@ public class UserQuestLockEvent extends UserEvent {
 
     @Override
     public void applyTo(User user) {
+        final long now = System.currentTimeMillis();
         user.setLockedQuestId(questId);
+        final long mustCompleteQuestTill = now + ConfigService.QUEST_LOCK_TIME;
+        user.setMustCompleteQuestTill(mustCompleteQuestTill);
+        user.setUnableToLockQuestTill(mustCompleteQuestTill + ConfigService.UNCOMPLETED_LOCK_PENALTY_TIME);
     }
 }

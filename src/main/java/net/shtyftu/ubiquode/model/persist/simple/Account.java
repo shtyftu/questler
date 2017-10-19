@@ -1,24 +1,27 @@
 package net.shtyftu.ubiquode.model.persist.simple;
 
+import net.shtyftu.ubiquode.model.Model;
+
 /**
  * @author shtyftu
  **/
-public class Account implements PersistEntity<String> {
+public class Account extends Model implements PersistEntity {
 
 //    private static final String SALT = "r12j012f!@R@02j";
 
-    private final String username;
+    private final String login;
     private final String password;
+    private final String userId;
 //    private final String passwordHash;
 
-    public Account(String username, String password) {
-        this.username = username;
+    public Account(String username, String password, String userId) {
+        this.login = username;
         this.password = password;
-
+        this.userId = userId;
     }
 
-    public String getUsername() {
-        return username;
+    public String getLogin() {
+        return login;
     }
 
     public String getPassword() {
@@ -31,6 +34,6 @@ public class Account implements PersistEntity<String> {
 
     @Override
     public String getKey() {
-        return username;
+        return login;
     }
 }

@@ -28,7 +28,7 @@ public class UserQuestController {
     @RequestMapping("/quest/lock")
     public String lockQuest(
             @RequestParam(name = "questId") String questId,
-            @RequestParam(name = "questId") String userId) {
+            @RequestParam(name = "userId") String userId) {
         boolean result = questService.lock(questId, userId);
         return result ? "OK" : "FAIL";
     }

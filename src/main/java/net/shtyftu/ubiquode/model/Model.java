@@ -12,4 +12,9 @@ public class Model {
     public String toString() {
         return GSON.toJson(this);
     }
+
+    protected long now() {
+        return System.currentTimeMillis();
+
+    }
 }

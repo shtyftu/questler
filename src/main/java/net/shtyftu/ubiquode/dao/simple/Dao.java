@@ -6,11 +6,11 @@ import net.shtyftu.ubiquode.model.persist.simple.PersistEntity;
 /**
  * @author shtyftu
  */
-public interface Dao<E extends PersistEntity<K>, K> {
+public interface Dao<E extends PersistEntity> {
 
-    E getByKey(K key);
+    E getByKey(String key);
 
-    Set<K> getAllKeys();
+    Set<String> getAllKeys();
 
     void save(E entity);
 }

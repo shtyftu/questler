@@ -1,18 +1,13 @@
 package net.shtyftu.ubiquode.service;
 
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-import net.shtyftu.ubiquode.dao.composite.event.QuestEventDao;
 import net.shtyftu.ubiquode.dao.simple.QuestProtoDao;
-import net.shtyftu.ubiquode.dao.composite.event.UserEventDao;
-import net.shtyftu.ubiquode.model.persist.composite.event.quest.QuestLockEvent;
-import net.shtyftu.ubiquode.model.persist.composite.event.user.UserQuestLockEvent;
-import net.shtyftu.ubiquode.processor.QuestStateProcessor;
+import net.shtyftu.ubiquode.model.persist.simple.User;
 import net.shtyftu.ubiquode.model.projection.QuestState;
 import net.shtyftu.ubiquode.model.projection.QuestState.State;
+import net.shtyftu.ubiquode.processor.QuestStateProcessor;
+import net.shtyftu.ubiquode.processor.UserProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,27 +17,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class QuestService {
 
-    private static final long LOCK_TIME_MINUTES = TimeUnit.HOURS.toMinutes(3);
-
     private final QuestProtoDao questProtoDao;
-    private final QuestEventDao questEventDao;
-    private final UserEventDao userEventDao;
     private final QuestStateProcessor questStateProcessor;
-
-    private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1, r -> {
-        Thread t = new Thread(r);
-        t.setDaemon(true);
-        t.setName(QuestService.class + "-executor-thread");
-        return t;
-    });
+    private final UserProcessor userProcessor;
 
     @Autowired
-    public QuestService(QuestProtoDao questProtoDao, QuestEventDao questEventDao, UserEventDao userEventDao,
-            QuestStateProcessor questStateProcessor) {
+    public QuestService(
+            QuestProtoDao questProtoDao,
+            QuestStateProcessor questStateProcessor,
+            UserProcessor userProcessor) {
         this.questProtoDao = questProtoDao;
-        this.questEventDao = questEventDao;
-        this.userEventDao = userEventDao;
         this.questStateProcessor = questStateProcessor;
+        this.userProcessor = userProcessor;
     }
 
     public List<QuestState> getAll() {
@@ -53,17 +39,34 @@ public class QuestService {
 
     public boolean lock(String questId, String userId) {
         final QuestState questState = questStateProcessor.getByKey(questId);
-        if (questState.getState().equals(State.Available)) {
-            questEventDao.save(new QuestLockEvent(questId, userId));
-            userEventDao.save(new UserQuestLockEvent(userId, questId));
-            executor.schedule(() -> unlock(questId, userId), LOCK_TIME_MINUTES, TimeUnit.MINUTES);
-            return true;
+        final State state = questState.getState();
+        if (!State.Available.equals(state) && !State.DeadlinePanic.equals(state)) {
+            return false;
         }
-        return false;
+        final User user = userProcessor.getByKey(userId);
+        if (user.isNeedToDealWithDeadline() && !State.DeadlinePanic.equals(state)
+                && getAll().stream().anyMatch(q -> State.DeadlinePanic.equals(q.getState()))) {
+            return false;
+        }
+        if (!user.isCanLockQuest()) {
+            return false;
+        }
+        questStateProcessor.lock(questId, userId);
+        userProcessor.lock(userId, questId);
+        return true;
     }
 
-    private void unlock(String questId, String userId) {
-
+    public boolean complete(String questId, String userId) {
+        final User user = userProcessor.getByKey(userId);
+        if (!questId.equals(user.getLockedQuestId())) {
+            return false;
+        }
+        if (!user.isCanCompleteQuest(questId)) {
+            return false;
+        }
+        questStateProcessor.complete(questId);
+        userProcessor.complete(userId, questId);
+        return true;
     }
 
 }

@@ -1,9 +1,11 @@
 package net.shtyftu.ubiquode.model.persist.composite.event;
 
+import net.shtyftu.ubiquode.model.Model;
+
 /**
  * @author shtyftu
  */
-public abstract class AEvent<T> implements Event<T, String> {
+public abstract class AEvent<T> extends Model implements Event<T> {
 
     private final long time;
     private final String id;

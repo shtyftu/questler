@@ -31,19 +31,19 @@ public class AccountController {
 
     @RequestMapping("/login")
     public String login(
-            @RequestParam(name = "user") String user,
+            @RequestParam(name = "login") String login,
             @RequestParam(name = "password") String password) {
-        return service.validateUser(new Account(user, password))
+        return service.validateUser(new Account(login, password, login))
                 ? userQuestController.getList()
                 : loginPage();
     }
 
     @RequestMapping("/register/user")
     public String register(
-            @RequestParam(name = "user") String user,
+            @RequestParam(name = "login") String login,
             @RequestParam(name = "password") String password) {
-        return service.register(new Account(user, password))
-                ? login(user, password)
+        return service.register(new Account(login, password, login))
+                ? login(login, password)
                 : registerPage();
     }
 

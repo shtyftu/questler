@@ -5,7 +5,7 @@ import net.shtyftu.ubiquode.model.persist.composite.CompositeKeyPersistEntity;
 /**
  * @author shtyftu
  */
-public interface Event<T, K> extends Comparable<Event<T, K>>, CompositeKeyPersistEntity<K, Long> {
+public interface Event<T> extends Comparable<Event<T>>, CompositeKeyPersistEntity<Long> {
 
     long getTime();
 
@@ -17,7 +17,7 @@ public interface Event<T, K> extends Comparable<Event<T, K>>, CompositeKeyPersis
     }
 
     @Override
-    default int compareTo(Event<T, K> o) {
+    default int compareTo(Event<T> o) {
         return o == null ? 1 : Long.compare(getTime(), o.getTime());
     }
 

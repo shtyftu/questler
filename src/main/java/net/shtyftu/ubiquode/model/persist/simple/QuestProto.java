@@ -1,20 +1,24 @@
 package net.shtyftu.ubiquode.model.persist.simple;
 
+import net.shtyftu.ubiquode.model.Model;
+
 /**
  * @author shtyftu
  */
-public class QuestProto implements PersistEntity<String> {
+public class QuestProto extends Model implements PersistEntity {
 
     private String id;
     private String name;
     private Long cooldown;
     private Long deadline;
+    private int scores;
 
-    public QuestProto(String id, String name, Long cooldown, Long deadline) {
+    public QuestProto(String id, String name, Long cooldown, Long deadline, int scores) {
         this.id = id;
         this.name = name;
         this.cooldown = cooldown;
         this.deadline = deadline;
+        this.scores = scores;
     }
 
     @Override
@@ -36,5 +40,9 @@ public class QuestProto implements PersistEntity<String> {
 
     public Long getDeadline() {
         return deadline;
+    }
+
+    public int getScores() {
+        return scores;
     }
 }

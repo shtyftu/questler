@@ -7,6 +7,6 @@ import org.springframework.stereotype.Component;
  * @author shtyftu
  */
 @Component
-public class AccountDao extends HashMapDao<Account, String> {
+public class AccountDao extends HashMapDao<Account> {
 
 }

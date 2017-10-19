@@ -7,6 +7,6 @@ import org.springframework.stereotype.Component;
  * @author shtyftu
  */
 @Component
-public class QuestEventDao extends HashMapEventDao<QuestEvent, String> {
+public class QuestEventDao extends HashMapEventDao<QuestEvent> {
 
 }

@@ -3,8 +3,8 @@ package net.shtyftu.ubiquode.model.persist.simple;
 /**
  * @author shtyftu
  */
-public interface PersistEntity<K> {
+public interface PersistEntity {
 
-    K getKey();
+    String getKey();
 
 }

@@ -5,7 +5,7 @@ import net.shtyftu.ubiquode.model.persist.simple.PersistEntity;
 /**
  * @author shtyftu
  */
-public interface CompositeKeyPersistEntity<K, P> extends PersistEntity<K> {
+public interface CompositeKeyPersistEntity<P> extends PersistEntity {
 
     P getPartitionKey();
 

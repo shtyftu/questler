@@ -8,17 +8,17 @@ import net.shtyftu.ubiquode.model.persist.simple.PersistEntity;
 /**
  * @author shtyftu
  */
-public class HashMapDao<E extends PersistEntity<K>, K> implements Dao<E, K> {
+public class HashMapDao<E extends PersistEntity> implements Dao<E> {
 
-    private final Map<K, E> data = new HashMap<>();
+    private final Map<String, E> data = new HashMap<>();
 
     @Override
-    public E getByKey(K key) {
+    public E getByKey(String key) {
         return data.get(key);
     }
 
     @Override
-    public Set<K> getAllKeys() {
+    public Set<String> getAllKeys() {
         return data.keySet();
     }
 

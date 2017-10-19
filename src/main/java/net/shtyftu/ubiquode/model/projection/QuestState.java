@@ -2,72 +2,66 @@ package net.shtyftu.ubiquode.model.projection;
 
 import net.shtyftu.ubiquode.model.Model;
 import net.shtyftu.ubiquode.model.persist.simple.QuestProto;
+import net.shtyftu.ubiquode.service.ConfigService;
 
 /**
  * @author shtyftu
  */
 public class QuestState extends Model {
 
-    private String id;
     private Long deadlineAt;
     private Long cooldownTill;
-    private State state;
+    private Long lockedTill;
+    private boolean enabled;
     private transient QuestProto proto;
 
-    public QuestState(QuestProto proto, Long deadlineAt, Long cooldownTill, State state) {
-        this.id = proto.getId();
-        this.deadlineAt = deadlineAt;
-        this.cooldownTill = cooldownTill;
-        this.state = state;
+    public QuestState(QuestProto proto) {
         this.proto = proto;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Long getDeadlineAt() {
-        return deadlineAt;
     }
 
     public void setDeadlineAt(Long deadlineAt) {
         this.deadlineAt = deadlineAt;
     }
 
-    public Long getCooldownTill() {
-        return cooldownTill;
-    }
-
     public void setCooldownTill(Long cooldownTill) {
         this.cooldownTill = cooldownTill;
     }
 
-    public State getState() {
-        return state;
+    public void setLockedTill(Long lockedTill) {
+        this.lockedTill = lockedTill;
     }
 
-    public void setState(State state) {
-        this.state = state;
+    public State getState() {
+        if (!enabled) {
+            return State.Disabled;
+        }
+        if (lockedTill != null && now() < lockedTill) {
+            return State.LockedByUser;
+        }
+        if (cooldownTill != null && now() < cooldownTill) {
+            return State.OnCooldown;
+        }
+        if (deadlineAt != null && now() > deadlineAt + ConfigService.PANIC_TIME_BEFORE_DEADLINE) {
+            return State.DeadlinePanic;
+        }
+        return State.Available;
     }
+
 
     public QuestProto getProto() {
         return proto;
     }
 
-    public void setProto(QuestProto proto) {
-        this.proto = proto;
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public enum State {
         Disabled,
         Available,
         OnCooldown,
-        LockedByUser
+        LockedByUser,
+        DeadlinePanic
     }
-
 
 }

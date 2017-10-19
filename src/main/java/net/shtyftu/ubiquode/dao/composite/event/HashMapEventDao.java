@@ -6,7 +6,7 @@ import net.shtyftu.ubiquode.model.persist.composite.event.Event;
 /**
  * @author shtyftu
  */
-public abstract class HashMapEventDao<E extends Event<?, K>, K> extends HashMapCompositeKeyDao<E, K, Long>
-        implements EventDao<E, K> {
+public abstract class HashMapEventDao<E extends Event<?>> extends HashMapCompositeKeyDao<E, Long>
+        implements EventDao<E> {
 
 }

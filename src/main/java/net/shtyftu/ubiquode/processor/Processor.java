@@ -8,24 +8,27 @@ import net.shtyftu.ubiquode.model.persist.composite.event.Event;
 /**
  * @author shtyftu
  */
-public abstract class Processor<T, K, E extends Event<T, K>> {
+public abstract class Processor<T, E extends Event<T>> {
 
-    private final EventDao<E, K> eventDao;
+    private final EventDao<E> eventDao;
 
-    public Processor(EventDao<E, K> eventDao) {
+    public Processor(EventDao<E> eventDao) {
         this.eventDao = eventDao;
     }
 
-    public T getByKey(K key) {
+    public T getByKey(String key) {
         final T result = createNew(key);
 
         final List<E> events = eventDao.getByKey(key);
         Collections.sort(events);
         events.forEach(e-> e.applyTo(result));
         return result;
-
     }
 
-    protected abstract T createNew(K key);
+    protected void save(E entity) {
+        eventDao.save(entity);
+    }
+
+    protected abstract T createNew(String key);
 
 }
