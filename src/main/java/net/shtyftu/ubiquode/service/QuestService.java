@@ -38,7 +38,7 @@ public class QuestService {
     }
 
     public boolean lock(String questId, String userId) {
-        final QuestState questState = questStateProcessor.getByKey(questId);
+        final QuestState questState = get(questId);
         final State state = questState.getState();
         if (!State.Available.equals(state) && !State.DeadlinePanic.equals(state)) {
             return false;
@@ -69,4 +69,16 @@ public class QuestService {
         return true;
     }
 
+    public boolean enable(String questId) {
+        final QuestState questState = get(questId);
+        if (State.Disabled.equals(questState.getState())) {
+            questStateProcessor.enable(questId);
+            return true;
+        }
+        return false;
+    }
+
+    private QuestState get(String questId) {
+        return questStateProcessor.getByKey(questId);
+    }
 }

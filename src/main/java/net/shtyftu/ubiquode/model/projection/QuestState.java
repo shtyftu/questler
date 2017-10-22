@@ -56,6 +56,14 @@ public class QuestState extends Model {
         this.enabled = enabled;
     }
 
+    public Long getCooldownTill() {
+        return cooldownTill;
+    }
+
+    public Long getDeadlineAt() {
+        return deadlineAt;
+    }
+
     public enum State {
         Disabled,
         Available,

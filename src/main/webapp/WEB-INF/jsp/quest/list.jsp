@@ -24,26 +24,43 @@
 <body>
 <%@ include file="../index.jsp" %>
 
-<nav class="navbar navbar-inverse">
-    <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">DONT LIKE</a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Home</a></li>
-                <li><a href="#about">About</a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
+<%--<nav class="navbar navbar-inverse">--%>
+    <%--<div class="container">--%>
+        <%--<div class="navbar-header">--%>
+            <%--<a class="navbar-brand" href="#">DONT LIKE</a>--%>
+        <%--</div>--%>
+        <%--<div id="navbar" class="collapse navbar-collapse">--%>
+            <%--<ul class="nav navbar-nav">--%>
+                <%--<li class="active"><a href="#">Home</a></li>--%>
+                <%--<li><a href="#about">About</a></li>--%>
+            <%--</ul>--%>
+        <%--</div>--%>
+    <%--</div>--%>
+<%--</nav>--%>
+<%----%>
 <div class="container">
 
-    <div class="starter-template">
-        <h1>STRAIGHT LINES</h1>
-        <h2>Message: ${message}</h2>
-    </div>
+    <%--<div class="starter-template">--%>
+        <%--<h1>STRAIGHT LINES</h1>--%>
+        <%--<h2>Message: ${message}</h2>--%>
+        <%--</div>--%>
+        <table>
+            <c:set var="index" value="1"/>
+            <c:forEach var="quest" items="${questList}" >
+
+                <tr>
+                    <td>${index}</td>
+                    <c:set var="index" value="${index + 1}"/>
+                    <td>${quest.name}</td>
+                    <td>${quest.state}</td>
+                    <td>${quest.time}</td>
+                    <td><a href="/quest/enable?questId=${quest.id}">Enable</a></td>
+
+
+                </tr>
+            </c:forEach>
+        </table>
+
 
 </div>
 

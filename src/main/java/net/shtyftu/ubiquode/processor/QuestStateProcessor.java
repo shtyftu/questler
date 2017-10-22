@@ -3,6 +3,7 @@ package net.shtyftu.ubiquode.processor;
 import net.shtyftu.ubiquode.dao.composite.event.QuestEventDao;
 import net.shtyftu.ubiquode.dao.simple.QuestProtoDao;
 import net.shtyftu.ubiquode.model.persist.composite.event.quest.QuestCompleteEvent;
+import net.shtyftu.ubiquode.model.persist.composite.event.quest.QuestEnableEvent;
 import net.shtyftu.ubiquode.model.persist.composite.event.quest.QuestEvent;
 import net.shtyftu.ubiquode.model.persist.composite.event.quest.QuestLockEvent;
 import net.shtyftu.ubiquode.model.persist.simple.QuestProto;
@@ -37,5 +38,9 @@ public class QuestStateProcessor extends Processor<QuestState, QuestEvent> {
 
     public void complete(String questId) {
         save(new QuestCompleteEvent(questId));
+    }
+
+    public void enable(String questId) {
+        save(new QuestEnableEvent(questId));
     }
 }

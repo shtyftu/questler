@@ -23,18 +23,11 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter {
         resolver.setPrefix("/WEB-INF/jsp/");
         resolver.setSuffix(".jsp");
         resolver.setViewClass(JstlView.class);
+        resolver.setCache(false);
         registry.viewResolver(resolver);
     }
 
 
-//    @Bean
-//    public ViewResolver getViewResolver() {
-//        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
-//        resolver.setViewClass(JstlView.class);
-//        resolver.setPrefix("/WEB-INF/jsp");
-//        resolver.setSuffix(".jsp");
-//        return resolver;
-//    }
 
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
