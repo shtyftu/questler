@@ -6,7 +6,7 @@ import net.shtyftu.ubiquode.model.persist.composite.event.user.UserEvent;
 import net.shtyftu.ubiquode.model.persist.composite.event.user.UserQuestCompleteEvent;
 import net.shtyftu.ubiquode.model.persist.composite.event.user.UserQuestLockEvent;
 import net.shtyftu.ubiquode.model.persist.simple.QuestProto;
-import net.shtyftu.ubiquode.model.persist.simple.User;
+import net.shtyftu.ubiquode.model.projection.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -1,6 +1,6 @@
 package net.shtyftu.ubiquode.model.persist.composite.event.user;
 
-import net.shtyftu.ubiquode.model.persist.simple.User;
+import net.shtyftu.ubiquode.model.projection.User;
 
 /**
  * @author shtyftu

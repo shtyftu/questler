@@ -1,5 +1,9 @@
 package net.shtyftu.ubiquode.controller;
 
+import com.google.common.collect.ImmutableMap;
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import net.shtyftu.ubiquode.model.projection.QuestState;
 import net.shtyftu.ubiquode.service.QuestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -7,22 +11,25 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @author shtyftu
  */
 @Controller
+@RequestMapping("/quest")
 public class UserQuestController {
 
     @Value("${application.message:Hello World}")
-    private String message = "Hello World";
+    private String hello = "Hello World";
 
     @Autowired
     private QuestService questService;
 
-    @RequestMapping("/quest/list")
-    public String getList() {
-        return questService.getAll().toString();
+    @RequestMapping("/list")
+    public ModelAndView getList(HttpServletRequest request) {
+        final List<QuestState> questStateList = questService.getAll();
+        return new ModelAndView("quest/list", ImmutableMap.of("message", "zag-zag"));
     }
 
     @RequestMapping("/quest/lock")
@@ -35,7 +42,7 @@ public class UserQuestController {
 
     @RequestMapping("/foo")
     public String welcome(Model model) {
-        model.addAttribute("message", this.message);
+        model.addAttribute("message", this.hello);
         return "welcome";
     }
 //

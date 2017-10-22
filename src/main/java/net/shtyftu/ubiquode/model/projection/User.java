@@ -1,4 +1,4 @@
-package net.shtyftu.ubiquode.model.persist.simple;
+package net.shtyftu.ubiquode.model.projection;
 
 import net.shtyftu.ubiquode.model.Model;
 

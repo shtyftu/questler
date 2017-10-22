@@ -3,7 +3,7 @@ package net.shtyftu.ubiquode.service;
 import java.util.List;
 import java.util.stream.Collectors;
 import net.shtyftu.ubiquode.dao.simple.QuestProtoDao;
-import net.shtyftu.ubiquode.model.persist.simple.User;
+import net.shtyftu.ubiquode.model.projection.User;
 import net.shtyftu.ubiquode.model.projection.QuestState;
 import net.shtyftu.ubiquode.model.projection.QuestState.State;
 import net.shtyftu.ubiquode.processor.QuestStateProcessor;
