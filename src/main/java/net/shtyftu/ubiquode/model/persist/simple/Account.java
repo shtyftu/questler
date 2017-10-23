@@ -1,11 +1,11 @@
 package net.shtyftu.ubiquode.model.persist.simple;
 
-import net.shtyftu.ubiquode.model.Model;
+import net.shtyftu.ubiquode.model.AModel;
 
 /**
  * @author shtyftu
  **/
-public class Account extends Model implements PersistEntity {
+public class Account extends AModel implements PersistEntity {
 
 //    private static final String SALT = "r12j012f!@R@02j";
 

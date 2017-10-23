@@ -1,18 +1,15 @@
 package net.shtyftu.ubiquode.controller;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
-import net.shtyftu.ubiquode.model.projection.QuestState;
 import net.shtyftu.ubiquode.model.web.QuestModel;
 import net.shtyftu.ubiquode.service.QuestService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -26,18 +23,22 @@ public class UserQuestController {
 //    @Value("${application.message:Hello World}")
 //    private String hello = "Hello World";
 
-    @Autowired
-    private QuestService questService;
 
-    @RequestMapping("/list")
+    private final QuestService questService;
+
+    @Autowired
+    public UserQuestController(QuestService questService) {
+        this.questService = questService;
+    }
+
+    @RequestMapping(path = "/list", method = RequestMethod.GET)
     public ModelAndView getList(HttpServletRequest request) {
+        final String userId = null;
         final List<QuestModel> questList = questService.getAll().stream()
-                .map(QuestModel::new)
+                .map((questState) -> new QuestModel(questState, userId))
+                .sorted()
                 .collect(Collectors.toList());
-        return new ModelAndView(
-                "quest/list",
-                ImmutableMap.of(
-                        "questList", questList));
+        return new ModelAndView("quest/list", ImmutableMap.of("questList", questList));
     }
 
     //todo make it post
@@ -58,8 +59,17 @@ public class UserQuestController {
         return getList(request);
     }
 
+    @RequestMapping("/complete")
+    public ModelAndView completeQuest(
+            @RequestParam(name = "questId") String questId,
+            @RequestParam(name = "userId") String userId,
+            HttpServletRequest request) {
+        boolean result = questService.complete(questId, userId);
+        return getList(request);
+    }
+
 //    @RequestMapping("/foo")
-//    public String welcome(Model model) {
+//    public String welcome(AModel model) {
 //        model.addAttribute("message", this.hello);
 //        return "welcome";
 //    }

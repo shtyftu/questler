@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 /**
  * @author shtyftu
  */
-public class Model {
+public abstract class AModel {
     private static final Gson GSON = new Gson();
 
     @Override

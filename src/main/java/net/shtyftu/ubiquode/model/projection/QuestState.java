@@ -1,17 +1,18 @@
 package net.shtyftu.ubiquode.model.projection;
 
-import net.shtyftu.ubiquode.model.Model;
+import net.shtyftu.ubiquode.model.AModel;
 import net.shtyftu.ubiquode.model.persist.simple.QuestProto;
 import net.shtyftu.ubiquode.service.ConfigService;
 
 /**
  * @author shtyftu
  */
-public class QuestState extends Model {
+public class QuestState extends AModel {
 
     private Long deadlineAt;
     private Long cooldownTill;
     private Long lockedTill;
+    private String userId;
     private boolean enabled;
     private transient QuestProto proto;
 
@@ -21,6 +22,10 @@ public class QuestState extends Model {
 
     public void setDeadlineAt(Long deadlineAt) {
         this.deadlineAt = deadlineAt;
+    }
+
+    public Long getLockedTill() {
+        return lockedTill;
     }
 
     public void setCooldownTill(Long cooldownTill) {
@@ -64,12 +69,30 @@ public class QuestState extends Model {
         return deadlineAt;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     public enum State {
-        Disabled,
-        Available,
-        OnCooldown,
-        LockedByUser,
-        DeadlinePanic
+        Disabled(24),
+        Available(20),
+        OnCooldown(30),
+        LockedByUser(26),
+        DeadlinePanic(10);
+
+        private final int order;
+
+        State(int order) {
+            this.order = order;
+        }
+
+        public int getOrder() {
+            return order;
+        }
     }
 
 }

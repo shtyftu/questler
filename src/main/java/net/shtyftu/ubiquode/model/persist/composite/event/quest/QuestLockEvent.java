@@ -19,6 +19,7 @@ public class QuestLockEvent extends QuestEvent {
     public void applyTo(QuestState questState) {
         final long now = System.currentTimeMillis();
         questState.setLockedTill(now + ConfigService.QUEST_LOCK_TIME);
+        questState.setUserId(userId);
     }
 
 }

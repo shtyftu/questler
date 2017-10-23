@@ -1,11 +1,11 @@
 package net.shtyftu.ubiquode.model.projection;
 
-import net.shtyftu.ubiquode.model.Model;
+import net.shtyftu.ubiquode.model.AModel;
 
 /**
  * @author shtyftu
  */
-public class User extends Model {
+public class User extends AModel {
 
     private String name;
     private Long scores;

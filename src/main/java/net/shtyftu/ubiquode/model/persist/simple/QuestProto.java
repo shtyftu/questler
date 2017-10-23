@@ -1,11 +1,11 @@
 package net.shtyftu.ubiquode.model.persist.simple;
 
-import net.shtyftu.ubiquode.model.Model;
+import net.shtyftu.ubiquode.model.AModel;
 
 /**
  * @author shtyftu
  */
-public class QuestProto extends Model implements PersistEntity {
+public class QuestProto extends AModel implements PersistEntity {
 
     private String id;
     private String name;
