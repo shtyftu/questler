@@ -2,11 +2,11 @@ package net.shtyftu.ubiquode.controller;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import net.shtyftu.ubiquode.dao.simple.QuestListDao;
 import net.shtyftu.ubiquode.dao.simple.QuestProtoDao;
@@ -21,6 +21,8 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -42,7 +44,7 @@ public class QuestListController {
 
 
     @RequestMapping("/list")
-    public ModelAndView getList(HttpServletRequest request) {
+    public ModelAndView getList() {
         final List<QuestListModel> list = questListDao.getAllKeys().stream()
                 .map(questListDao::getByKey)
                 .map(q -> new QuestListModel(
@@ -53,35 +55,46 @@ public class QuestListController {
                                 .map(AModel::toString)
                                 .collect(Collectors.toList())))
                 .collect(Collectors.toList());
-        return new ModelAndView("list/list", ImmutableMap.of("listList", list));
+        return new ModelAndView("list/list", ImmutableMap.of("list", list));
     }
 
     @RequestMapping(value = "/export", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public void exportFile(String listId, HttpServletResponse response) {
         try {
-            final List<QuestListDump> list = questListDao.getAllKeys().stream()
-                    .map(questListDao::getByKey)
-                    .map(q -> new QuestListDump(
-                            q.getKey(),
-                            q.getQuestIdList().stream()
-                                    .map(questProtoDao::getByKey)
-                                    .collect(Collectors.toList())))
-                    .collect(Collectors.toList());
-            IOUtils.copy(new StringReader(GSON.toJson(list)), response.getOutputStream());
+            final QuestList questList = questListDao.getByKey(listId);
+            final QuestListDump dump = new QuestListDump(
+                    questList.getKey(),
+                    questList.getQuestIdList().stream()
+                            .map(questProtoDao::getByKey)
+                            .collect(Collectors.toList()));
+            IOUtils.copy(new StringReader(GSON.toJson(dump)), response.getOutputStream());
             response.flushBuffer();
         } catch (IOException ex) {
             throw new RuntimeException("IOError writing file to output stream");
         }
     }
 
-    @RequestMapping(value = "/import", method = RequestMethod.POST)
-    public void importFile(QuestListDump dump) {
-        questListDao.save(new QuestList(
-                dump.getId(),
-                dump.getList().stream()
-                        .map(QuestProto::getKey)
-                        .collect(Collectors.toList())));
-        dump.getList().forEach(questProtoDao::save);
+    @RequestMapping(value = "/import",
+            method = RequestMethod.POST,
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//    public void importFile(MultipartFile file, HttpServletRequest request) {
+    public ModelAndView importFile(@RequestParam("file") MultipartFile dumpFile) {
+        try {
+            final String jsonString = IOUtils.toString(dumpFile.getInputStream());
+            final TypeToken<List<QuestListDump>> listType = new TypeToken<List<QuestListDump>>() {};
+            final List<QuestListDump> questListDumpList = GSON.fromJson(jsonString, listType.getType());
+            questListDumpList.forEach(dump -> {
+                questListDao.save(new QuestList(
+                        dump.getId(),
+                        dump.getList().stream()
+                                .map(QuestProto::getKey)
+                                .collect(Collectors.toList())));
+                dump.getList().forEach(questProtoDao::save);
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return getList();
     }
 
 

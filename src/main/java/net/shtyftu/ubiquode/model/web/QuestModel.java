@@ -41,7 +41,7 @@ public class QuestModel implements Comparable<QuestModel> {
                 break;
             case Disabled:
                 this.time = null;
-                this.actionLink = "/quest/enable?questId" + id;
+                this.actionLink = "/quest/enable?questId=" + id;
                 this.actionName = "Enable";
                 break;
             case LockedByUser:
@@ -74,6 +74,14 @@ public class QuestModel implements Comparable<QuestModel> {
 
     public Long getTime() {
         return time;
+    }
+
+    public String getActionName() {
+        return actionName;
+    }
+
+    public String getActionLink() {
+        return actionLink;
     }
 
     @Override

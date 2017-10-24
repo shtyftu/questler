@@ -80,19 +80,6 @@
       <artifactId>thymeleaf-extras-springsecurity4</artifactId>
       <version>2.1.2.RELEASE</version>
     </dependency>
-    <!-- Tomcat embedded container-->
-    <!--<dependency>-->
-      <!--<groupId>org.springframework.boot</groupId>-->
-      <!--<artifactId>spring-boot-starter-tomcat</artifactId>-->
-      <!--<scope>provided</scope>-->
-    <!--</dependency>-->
-    <!-- Tests -->
-    <!--<dependency>-->
-      <!--<groupId>org.springframework.boot</groupId>-->
-      <!--<artifactId>spring-boot-starter-test</artifactId>-->
-      <!--<version>1.5.1.RELEASE</version>-->
-    <!--</dependency>-->
-    <!-- Gson -->
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
@@ -119,13 +106,11 @@
       <artifactId>commons-io</artifactId>
       <version>1.3.2</version>
     </dependency>
-
-
-
     <!-- JSTL for JSP -->
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>jstl</artifactId>
+      <scope>provided</scope>
     </dependency>
     <!-- Need this to compile JSP -->
     <dependency>

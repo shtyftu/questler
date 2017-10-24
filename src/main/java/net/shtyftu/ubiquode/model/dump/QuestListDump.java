@@ -8,8 +8,11 @@ import net.shtyftu.ubiquode.model.persist.simple.QuestProto;
  */
 public class QuestListDump {
 
-    final String id;
-    final List<QuestProto> list;
+    private String id;
+    private List<QuestProto> list;
+
+    public QuestListDump() {
+    }
 
     public QuestListDump(String id, List<QuestProto> list) {
         this.id = id;
