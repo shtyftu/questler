@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
-import net.shtyftu.ubiquode.dao.simple.QuestProtoDao;
+import net.shtyftu.ubiquode.dao.plain.QuestProtoDao;
 import net.shtyftu.ubiquode.model.dump.QuestProtoDump;
 import net.shtyftu.ubiquode.model.persist.simple.QuestProto;
 import net.shtyftu.ubiquode.model.view.QuestProtoView;

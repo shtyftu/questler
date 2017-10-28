@@ -1,7 +1,7 @@
 package net.shtyftu.ubiquode.processor;
 
 import net.shtyftu.ubiquode.dao.composite.event.QuestEventDao;
-import net.shtyftu.ubiquode.dao.simple.QuestProtoDao;
+import net.shtyftu.ubiquode.dao.plain.QuestProtoDao;
 import net.shtyftu.ubiquode.model.persist.composite.event.quest.QuestCompleteEvent;
 import net.shtyftu.ubiquode.model.persist.composite.event.quest.QuestEnableEvent;
 import net.shtyftu.ubiquode.model.persist.composite.event.quest.QuestEvent;

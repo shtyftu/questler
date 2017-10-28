@@ -3,7 +3,7 @@ package net.shtyftu.ubiquode.service;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import net.shtyftu.ubiquode.dao.simple.QuestProtoDao;
+import net.shtyftu.ubiquode.dao.plain.QuestProtoDao;
 import net.shtyftu.ubiquode.model.QuestPack;
 import net.shtyftu.ubiquode.model.projection.Quest;
 import net.shtyftu.ubiquode.model.projection.Quest.State;
@@ -21,17 +21,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class QuestService {
 
-    private final QuestProtoDao questProtoDao;
     private final QuestProcessor questProcessor;
     private final QuestPackProcessor questPackProcessor;
     private final UserProcessor userProcessor;
 
     @Autowired
-    public QuestService(
-            QuestProtoDao questProtoDao,
-            QuestProcessor questProcessor,
+    public QuestService(QuestProcessor questProcessor,
             QuestPackProcessor questPackProcessor, UserProcessor userProcessor) {
-        this.questProtoDao = questProtoDao;
         this.questProcessor = questProcessor;
         this.questPackProcessor = questPackProcessor;
         this.userProcessor = userProcessor;
@@ -60,7 +56,7 @@ public class QuestService {
         if (State.DeadlinePanic != state) {
             final List<Quest> deadlinePanicQuests = questPack.getQuestIdList().stream()
                     .map(questProcessor::getById)
-                    .filter(quest -> State.DeadlinePanic == quest.getState())
+                    .filter(q -> State.DeadlinePanic == q.getState())
                     .collect(Collectors.toList());
             if (CollectionUtils.isNotEmpty(deadlinePanicQuests) && userId.equals(questPack.getLowestScoreUser())) {
                 return false;

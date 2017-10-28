@@ -2,7 +2,7 @@ package net.shtyftu.ubiquode.processor;
 
 import java.util.UUID;
 import net.shtyftu.ubiquode.dao.composite.event.EventDao;
-import net.shtyftu.ubiquode.dao.simple.QuestProtoDao;
+import net.shtyftu.ubiquode.dao.plain.QuestProtoDao;
 import net.shtyftu.ubiquode.model.persist.composite.event.user.UserAddQuestPackEvent;
 import net.shtyftu.ubiquode.model.persist.composite.event.user.UserEvent;
 import net.shtyftu.ubiquode.model.persist.composite.event.user.UserQuestCompleteEvent;

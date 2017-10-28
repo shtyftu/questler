@@ -3,7 +3,7 @@ package net.shtyftu.ubiquode.service;
 import com.google.common.collect.ImmutableList;
 import java.util.Collection;
 import java.util.List;
-import net.shtyftu.ubiquode.dao.simple.AccountDao;
+import net.shtyftu.ubiquode.dao.plain.AccountDao;
 import net.shtyftu.ubiquode.model.persist.simple.Account;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package net.shtyftu.ubiquode.dao.simple;
+package net.shtyftu.ubiquode.dao.plain;
 
 import net.shtyftu.ubiquode.model.persist.simple.Account;
 import org.springframework.stereotype.Component;

@@ -7,7 +7,7 @@ import com.google.common.collect.ImmutableMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import net.shtyftu.ubiquode.dao.simple.QuestProtoDao;
+import net.shtyftu.ubiquode.dao.plain.QuestProtoDao;
 import net.shtyftu.ubiquode.model.QuestPack;
 import net.shtyftu.ubiquode.model.persist.simple.QuestProto;
 import net.shtyftu.ubiquode.model.projection.Quest;

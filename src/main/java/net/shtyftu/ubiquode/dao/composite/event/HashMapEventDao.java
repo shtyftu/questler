@@ -1,12 +1,12 @@
 package net.shtyftu.ubiquode.dao.composite.event;
 
-import net.shtyftu.ubiquode.dao.composite.HashMapCompositeKeyDao;
-import net.shtyftu.ubiquode.model.persist.composite.event.Event;
+import net.shtyftu.ubiquode.dao.composite.HashMapCompositeIdDao;
+import net.shtyftu.ubiquode.model.persist.composite.event.AEvent;
 
 /**
  * @author shtyftu
  */
-public abstract class HashMapEventDao<E extends Event<?>> extends HashMapCompositeKeyDao<E, Long>
+public abstract class HashMapEventDao<E extends AEvent<?>> extends HashMapCompositeIdDao<E, Long>
         implements EventDao<E> {
 
 }

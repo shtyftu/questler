@@ -1,28 +1,24 @@
 package net.shtyftu.ubiquode.model.persist.composite.event;
 
-import net.shtyftu.ubiquode.model.AModel;
+import net.shtyftu.ubiquode.model.persist.composite.ModelWithCompositeId;
 
 /**
  * @author shtyftu
  */
-public abstract class AEvent<T> extends AModel implements Event<T> {
+public abstract class AEvent<T> extends ModelWithCompositeId<Long> implements Comparable<AEvent<T>>  {
 
-    private final long time;
-    private final String id;
-
-    public AEvent(String id) {
-        this.id = id;
-        this.time = System.currentTimeMillis();
+    protected AEvent(String id) {
+        super(id, System.currentTimeMillis());
     }
+
+    public abstract void applyTo(T entity);
 
     @Override
-    public String getId() {
-        return id;
+    public int compareTo(AEvent<T> o) {
+        return o == null ? 1 : Long.compare(getTime(), o.getTime());
     }
 
-    @Override
-    public long getTime() {
-        return time;
+    private long getTime() {
+        return getClusteringId();
     }
-
 }

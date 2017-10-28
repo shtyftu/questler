@@ -1,22 +1,22 @@
-package net.shtyftu.ubiquode.dao.simple;
+package net.shtyftu.ubiquode.dao.plain;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-import net.shtyftu.ubiquode.model.persist.simple.PersistEntity;
+import net.shtyftu.ubiquode.model.persist.simple.ModelWithId;
 
 /**
  * @author shtyftu
  */
-public abstract class HashMapDao<E extends PersistEntity> implements Dao<E> {
+public abstract class HashMapDao<E extends ModelWithId> implements Dao<E> {
 
     private final Map<String, E> data = new HashMap<>();
 
     @Override
-    public E getById(String key) {
-        return data.get(key);
+    public E getById(String id) {
+        return data.get(id);
     }
 
     @Override
@@ -37,7 +37,7 @@ public abstract class HashMapDao<E extends PersistEntity> implements Dao<E> {
     }
 
     @Override
-    public void save(List<E> entityList) {
-        entityList.forEach(this::save);
+    public void save(List<E> entities) {
+        entities.forEach(this::save);
     }
 }

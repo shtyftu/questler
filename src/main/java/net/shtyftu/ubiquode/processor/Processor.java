@@ -3,12 +3,12 @@ package net.shtyftu.ubiquode.processor;
 import java.util.Collections;
 import java.util.List;
 import net.shtyftu.ubiquode.dao.composite.event.EventDao;
-import net.shtyftu.ubiquode.model.persist.composite.event.Event;
+import net.shtyftu.ubiquode.model.persist.composite.event.AEvent;
 
 /**
  * @author shtyftu
  */
-public abstract class Processor<T, E extends Event<T>> {
+public abstract class Processor<T, E extends AEvent<T>> {
 
     private final EventDao<E> eventDao;
 

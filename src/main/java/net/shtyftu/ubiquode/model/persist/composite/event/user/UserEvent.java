@@ -8,7 +8,7 @@ import net.shtyftu.ubiquode.model.projection.User;
  */
 public abstract class UserEvent extends AEvent<User> {
 
-    public UserEvent(String userId) {
+    UserEvent(String userId) {
         super(userId);
     }
 

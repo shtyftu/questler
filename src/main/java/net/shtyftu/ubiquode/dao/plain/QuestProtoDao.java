@@ -1,4 +1,4 @@
-package net.shtyftu.ubiquode.dao.simple;
+package net.shtyftu.ubiquode.dao.plain;
 
 import java.util.concurrent.TimeUnit;
 import javax.annotation.PostConstruct;

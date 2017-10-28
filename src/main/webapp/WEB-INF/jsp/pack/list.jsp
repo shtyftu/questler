@@ -32,7 +32,4 @@
             </tr>
         </table>
     </jsp:body>
-    <jsp:attribute name="footer">
-      <p id="copyright">questler-life by shtyftu 2017</p>
-    </jsp:attribute>
 </t:page>

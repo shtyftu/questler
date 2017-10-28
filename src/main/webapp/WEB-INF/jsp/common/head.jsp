@@ -6,5 +6,4 @@
       crossorigin="anonymous"/>
 <%--<link rel="stylesheet" href="/css/main.css" th:href="@{/css/main.css}"/>--%>
 <%----%>
-<%--<c:url value="/css/main.css" var="jstlCss"/>--%>
-<%--<link href="${jstlCss}" rel="stylesheet"/>--%>
+<link rel="stylesheet" href="/css/main.css"/>
