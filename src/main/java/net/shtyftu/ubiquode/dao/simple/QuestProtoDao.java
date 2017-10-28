@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * @author shtyftu
  */
 @Component
-public class QuestProtoDao extends HashMapDao<QuestProto> implements Dao<QuestProto> {
+public class QuestProtoDao extends HashMapDao<QuestProto> {
 
     @PostConstruct
     public void init() {

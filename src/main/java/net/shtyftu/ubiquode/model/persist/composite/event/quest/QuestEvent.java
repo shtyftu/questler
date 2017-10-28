@@ -1,15 +1,14 @@
 package net.shtyftu.ubiquode.model.persist.composite.event.quest;
 
 import net.shtyftu.ubiquode.model.persist.composite.event.AEvent;
-import net.shtyftu.ubiquode.model.persist.composite.event.Event;
-import net.shtyftu.ubiquode.model.projection.QuestState;
+import net.shtyftu.ubiquode.model.projection.Quest;
 
 /**
  * @author shtyftu
  */
-public abstract class QuestEvent extends AEvent<QuestState> {
+public abstract class QuestEvent extends AEvent<Quest> {
 
-    public QuestEvent(String questId) {
+    QuestEvent(String questId) {
         super(questId);
     }
 

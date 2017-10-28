@@ -22,10 +22,6 @@ public class QuestProto extends AModel implements PersistEntity {
     }
 
     @Override
-    public String getKey() {
-        return id;
-    }
-
     public String getId() {
         return id;
     }

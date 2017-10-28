@@ -1,13 +1,17 @@
 package net.shtyftu.ubiquode.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import net.shtyftu.ubiquode.dao.simple.QuestProtoDao;
+import net.shtyftu.ubiquode.model.QuestPack;
+import net.shtyftu.ubiquode.model.projection.Quest;
+import net.shtyftu.ubiquode.model.projection.Quest.State;
 import net.shtyftu.ubiquode.model.projection.User;
-import net.shtyftu.ubiquode.model.projection.QuestState;
-import net.shtyftu.ubiquode.model.projection.QuestState.State;
-import net.shtyftu.ubiquode.processor.QuestStateProcessor;
+import net.shtyftu.ubiquode.processor.QuestPackProcessor;
+import net.shtyftu.ubiquode.processor.QuestProcessor;
 import net.shtyftu.ubiquode.processor.UserProcessor;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,67 +22,86 @@ import org.springframework.stereotype.Service;
 public class QuestService {
 
     private final QuestProtoDao questProtoDao;
-    private final QuestStateProcessor questStateProcessor;
+    private final QuestProcessor questProcessor;
+    private final QuestPackProcessor questPackProcessor;
     private final UserProcessor userProcessor;
 
     @Autowired
     public QuestService(
             QuestProtoDao questProtoDao,
-            QuestStateProcessor questStateProcessor,
-            UserProcessor userProcessor) {
+            QuestProcessor questProcessor,
+            QuestPackProcessor questPackProcessor, UserProcessor userProcessor) {
         this.questProtoDao = questProtoDao;
-        this.questStateProcessor = questStateProcessor;
+        this.questProcessor = questProcessor;
+        this.questPackProcessor = questPackProcessor;
         this.userProcessor = userProcessor;
     }
 
-    public List<QuestState> getAll() {
-        return questProtoDao.getAllKeys().stream()
-                .map(questStateProcessor::getByKey)
-                .collect(Collectors.toList());
+    public Map<String, List<Quest>> getAllFor(String userId) {
+        final User user = userProcessor.getById(userId);
+        final List<String> questPackIds = user.getQuestPackIds();
+        return questPackIds.stream()
+                .map(questPackProcessor::getById)
+                .collect(Collectors.toMap(
+                        QuestPack::getName,
+                        pack -> pack.getQuestIdList().stream()
+                                .map(questProcessor::getById)
+                                .collect(Collectors.toList())));
     }
 
-    public boolean lock(String questId, String userId) {
-        final QuestState questState = get(questId);
-        final State state = questState.getState();
+    public boolean lock(String questId, String userId, String packId) {
+        final Quest quest = get(questId);
+        final State state = quest.getState();
         if (!State.Available.equals(state) && !State.DeadlinePanic.equals(state)) {
             return false;
         }
-        final User user = userProcessor.getByKey(userId);
-        if (user.isNeedToDealWithDeadline() && !State.DeadlinePanic.equals(state)
-                && getAll().stream().anyMatch(q -> State.DeadlinePanic.equals(q.getState()))) {
-            return false;
+
+        final QuestPack questPack = questPackProcessor.getById(packId);
+        if (State.DeadlinePanic != state) {
+            final List<Quest> deadlinePanicQuests = questPack.getQuestIdList().stream()
+                    .map(questProcessor::getById)
+                    .filter(quest -> State.DeadlinePanic == quest.getState())
+                    .collect(Collectors.toList());
+            if (CollectionUtils.isNotEmpty(deadlinePanicQuests) && userId.equals(questPack.getLowestScoreUser())) {
+                return false;
+            }
         }
-        if (!user.isCanLockQuest()) {
-            return false;
+
+        if (State.DeadlinePanic != state || !userId.equals(questPack.getLowestScoreUser())) {
+            final User user = userProcessor.getById(userId);
+            if (!user.isCanLockQuest()) {
+                return false;
+            }
+
         }
-        questStateProcessor.lock(questId, userId);
+        questProcessor.lock(questId, userId);
         userProcessor.lock(userId, questId);
         return true;
     }
 
     public boolean complete(String questId, String userId) {
-        final User user = userProcessor.getByKey(userId);
+        final User user = userProcessor.getById(userId);
         if (!questId.equals(user.getLockedQuestId())) {
             return false;
         }
         if (!user.isCanCompleteQuest(questId)) {
             return false;
         }
-        questStateProcessor.complete(questId);
+        questProcessor.complete(questId);
         userProcessor.complete(userId, questId);
         return true;
     }
 
     public boolean enable(String questId) {
-        final QuestState questState = get(questId);
-        if (State.Disabled.equals(questState.getState())) {
-            questStateProcessor.enable(questId);
+        final Quest quest = get(questId);
+        if (State.Disabled.equals(quest.getState())) {
+            questProcessor.enable(questId);
             return true;
         }
         return false;
     }
 
-    private QuestState get(String questId) {
-        return questStateProcessor.getByKey(questId);
+    private Quest get(String questId) {
+        return questProcessor.getById(questId);
     }
 }

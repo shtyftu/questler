@@ -33,7 +33,7 @@ public class Account extends AModel implements PersistEntity {
 //    }
 
     @Override
-    public String getKey() {
+    public String getId() {
         return login;
     }
 }

@@ -7,17 +7,19 @@ import net.shtyftu.ubiquode.service.ConfigService;
 /**
  * @author shtyftu
  */
-public class QuestState extends AModel {
+public class Quest extends AModel {
 
+    private final String id;
     private Long deadlineAt;
     private Long cooldownTill;
     private Long lockedTill;
     private String userId;
     private boolean enabled;
+    private String protoId;
     private transient QuestProto proto;
 
-    public QuestState(QuestProto proto) {
-        this.proto = proto;
+    public Quest(String id) {
+        this.id = id;
     }
 
     public void setDeadlineAt(Long deadlineAt) {
@@ -75,6 +77,22 @@ public class QuestState extends AModel {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public void setProtoId(String protoId) {
+        this.protoId = protoId;
+    }
+
+    public String getProtoId() {
+        return protoId;
+    }
+
+    public void setProto(QuestProto proto) {
+        this.proto = proto;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public enum State {

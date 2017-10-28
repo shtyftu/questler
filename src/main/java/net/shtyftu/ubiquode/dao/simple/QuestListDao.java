@@ -7,8 +7,9 @@ import org.springframework.stereotype.Component;
 /**
  * @author shtyftu
  */
+@Deprecated
 @Component
-public class QuestListDao extends HashMapDao<QuestList> implements Dao<QuestList> {
+public class QuestListDao extends HashMapDao<QuestList> {
 
     public QuestListDao() {
         final ArrayList<String> idList = new ArrayList<String>() {{

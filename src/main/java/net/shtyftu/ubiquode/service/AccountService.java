@@ -24,7 +24,7 @@ public class AccountService {
 
     public boolean register(Account user) {
         if (user != null && StringUtils.isNotBlank(user.getLogin()) && StringUtils.isNotBlank(user.getPassword())
-                && accountDao.getByKey(user.getKey()) == null) {
+                && accountDao.getById(user.getId()) == null) {
             accountDao.save(user);
             return true;
         }
@@ -32,7 +32,7 @@ public class AccountService {
     }
 
     public Collection<? extends GrantedAuthority> getAuthorities(String login, String password) {
-        final Account savedAccount = accountDao.getByKey(login);
+        final Account savedAccount = accountDao.getById(login);
         if (savedAccount == null) {
             if (register(new Account(login, password, login))) {
                 return USER_AUTHORITY;

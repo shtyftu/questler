@@ -8,7 +8,7 @@
 <body>
 
 
-<%@ include file="index.jsp" %>
+<%@ include file="common/header.jsp" %>
 
 <h3>Login Form</h3>
 <br/>

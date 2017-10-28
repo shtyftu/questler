@@ -16,7 +16,7 @@ public abstract class AEvent<T> extends AModel implements Event<T> {
     }
 
     @Override
-    public String getKey() {
+    public String getId() {
         return id;
     }
 

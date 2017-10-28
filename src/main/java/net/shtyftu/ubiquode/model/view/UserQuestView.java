@@ -1,41 +1,43 @@
-package net.shtyftu.ubiquode.model.web;
+package net.shtyftu.ubiquode.model.view;
 
-import net.shtyftu.ubiquode.model.projection.QuestState;
-import net.shtyftu.ubiquode.model.projection.QuestState.State;
+import net.shtyftu.ubiquode.model.projection.Quest;
+import net.shtyftu.ubiquode.model.projection.Quest.State;
 
 /**
  * @author shtyftu
  */
-public class QuestModel implements Comparable<QuestModel> {
+public class UserQuestView implements Comparable<UserQuestView> {
 
     private final String id;
     private final String name;
+    private final String packName;
     private final String state;
     private final String actionName;
     private final String actionLink;
     private final Long time;
     private transient final int order;
 
-    public QuestModel(QuestState questState, String userId) {
-        this.id = questState.getProto().getId();
-        this.name = questState.getProto().getName();
-        final State state = questState.getState();
+    public UserQuestView(Quest quest, String userId, String packName) {
+        this.id = quest.getId();
+        this.name = quest.getProto().getName();
+        this.packName = packName;
+        final State state = quest.getState();
         this.state = state.name();
         this.order = state.getOrder();
 
         switch (state) {
             case Available:
-                this.time = questState.getDeadlineAt();
+                this.time = quest.getDeadlineAt();
                 this.actionLink = "/quest/lock?questId=" + id;
                 this.actionName = "Lock";
                 break;
             case DeadlinePanic:
-                this.time = questState.getDeadlineAt();
+                this.time = quest.getDeadlineAt();
                 this.actionLink = "/quest/complete?questId=" + id;
                 this.actionName = "Complete";
                 break;
             case OnCooldown:
-                this.time = questState.getCooldownTill();
+                this.time = quest.getCooldownTill();
                 this.actionLink = "";
                 this.actionName = "";
                 break;
@@ -45,8 +47,8 @@ public class QuestModel implements Comparable<QuestModel> {
                 this.actionName = "Enable";
                 break;
             case LockedByUser:
-                this.time = questState.getLockedTill();
-                if (questState.getUserId().equals(userId)) {
+                this.time = quest.getLockedTill();
+                if (quest.getUserId().equals(userId)) {
                     this.actionLink = "/quest/complete?questId=" + id;
                     this.actionName = "Complete";
                 } else {
@@ -85,7 +87,7 @@ public class QuestModel implements Comparable<QuestModel> {
     }
 
     @Override
-    public int compareTo(QuestModel other) {
+    public int compareTo(UserQuestView other) {
         if (other == null) {
             return -1;
         }

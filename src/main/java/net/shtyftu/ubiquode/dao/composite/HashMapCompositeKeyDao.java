@@ -14,20 +14,20 @@ public class HashMapCompositeKeyDao<E extends CompositeKeyPersistEntity<P>, P> i
     private final Map<String, Map<P, E>> data = new HashMap<>();
 
     @Override
-    public List<E> getByKey(String key) {
-        final Map<P, E> result = data.get(key);
+    public List<E> getById(String id) {
+        final Map<P, E> result = data.get(id);
         return result == null ? new ArrayList<>() : new ArrayList<>(result.values());
     }
 
     @Override
-    public E getByKey(String key, P partitionKey) {
-        final Map<P, E> allByKey = data.get(key);
-        return allByKey == null ? null : allByKey.get(partitionKey);
+    public E getById(String id, P partitionId) {
+        final Map<P, E> allByKey = data.get(id);
+        return allByKey == null ? null : allByKey.get(partitionId);
     }
 
     @Override
     public void save(E entity) {
-        final String key = entity.getKey();
+        final String key = entity.getId();
         final Map<P, E> allByKey = data.computeIfAbsent(key, k -> new HashMap<>());
         allByKey.put(entity.getPartitionKey(), entity);
     }

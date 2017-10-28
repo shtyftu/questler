@@ -1,7 +1,9 @@
 package net.shtyftu.ubiquode.processor;
 
+import java.util.UUID;
 import net.shtyftu.ubiquode.dao.composite.event.EventDao;
 import net.shtyftu.ubiquode.dao.simple.QuestProtoDao;
+import net.shtyftu.ubiquode.model.persist.composite.event.user.UserAddQuestPackEvent;
 import net.shtyftu.ubiquode.model.persist.composite.event.user.UserEvent;
 import net.shtyftu.ubiquode.model.persist.composite.event.user.UserQuestCompleteEvent;
 import net.shtyftu.ubiquode.model.persist.composite.event.user.UserQuestLockEvent;
@@ -34,7 +36,17 @@ public class UserProcessor extends Processor<User, UserEvent> {
     }
 
     public void complete(String userId, String questId) {
-        final QuestProto questProto = questProtoDao.getByKey(questId);
+        final QuestProto questProto = questProtoDao.getById(questId);
         save(new UserQuestCompleteEvent(userId, questProto.getScores()));
+    }
+
+    public String addNewQuestPack(String userId) {
+        final String packId = UUID.randomUUID().toString();
+        save(new UserAddQuestPackEvent(userId, packId, userId));
+        return packId;
+    }
+
+    public void addQuestPack(String userId, String packId, String inviterUserId) {
+        save(new UserAddQuestPackEvent(userId, packId, inviterUserId));
     }
 }

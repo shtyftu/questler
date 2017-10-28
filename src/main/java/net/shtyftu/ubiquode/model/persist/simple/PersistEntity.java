@@ -5,6 +5,6 @@ package net.shtyftu.ubiquode.model.persist.simple;
  */
 public interface PersistEntity {
 
-    String getKey();
+    String getId();
 
 }

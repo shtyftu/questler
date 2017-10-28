@@ -8,9 +8,9 @@ import net.shtyftu.ubiquode.model.persist.composite.CompositeKeyPersistEntity;
  */
 public interface CompositeKeyDao<E extends CompositeKeyPersistEntity<P>, P>  {
 
-    List<E> getByKey(String key);
+    List<E> getById(String id);
 
-    E getByKey(String key, P partitionKey);
+    E getById(String id, P partitionId);
 
     void save(E entity);
 

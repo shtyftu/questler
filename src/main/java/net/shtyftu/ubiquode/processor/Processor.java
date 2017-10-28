@@ -16,10 +16,10 @@ public abstract class Processor<T, E extends Event<T>> {
         this.eventDao = eventDao;
     }
 
-    public T getByKey(String key) {
-        final T result = createNew(key);
+    public T getById(String id) {
+        final T result = createNew(id);
 
-        final List<E> events = eventDao.getByKey(key);
+        final List<E> events = eventDao.getById(id);
         Collections.sort(events);
         events.forEach(e-> e.applyTo(result));
         return result;

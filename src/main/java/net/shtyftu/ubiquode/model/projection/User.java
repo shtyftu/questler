@@ -1,5 +1,7 @@
 package net.shtyftu.ubiquode.model.projection;
 
+import java.util.ArrayList;
+import java.util.List;
 import net.shtyftu.ubiquode.model.AModel;
 
 /**
@@ -13,9 +15,11 @@ public class User extends AModel {
     private Long mustCompleteQuestTill;
     private Long unableToLockQuestTill;
     private int score;
+    private List<String> questPackIds;
 
     public User(String name) {
         this.name = name;
+        this.questPackIds = new ArrayList<>();
     }
 
     public boolean isCanLockQuest() {
@@ -53,5 +57,13 @@ public class User extends AModel {
 
     public boolean isNeedToDealWithDeadline() {
         return true;
+    }
+
+    public List<String> getQuestPackIds() {
+        return questPackIds;
+    }
+
+    public void setQuestPackIds(List<String> questPackIds) {
+        this.questPackIds = questPackIds;
     }
 }

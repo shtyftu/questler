@@ -1,6 +1,6 @@
 package net.shtyftu.ubiquode.model.persist.composite.event.quest;
 
-import net.shtyftu.ubiquode.model.projection.QuestState;
+import net.shtyftu.ubiquode.model.projection.Quest;
 
 /**
  * @author shtyftu
@@ -12,7 +12,7 @@ public class QuestEnableEvent extends QuestEvent {
     }
 
     @Override
-    public void applyTo(QuestState entity) {
+    public void applyTo(Quest entity) {
         entity.setEnabled(true);
         entity.setDeadlineAt(now() + entity.getProto().getDeadline());
     }

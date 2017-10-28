@@ -1,5 +1,6 @@
 package net.shtyftu.ubiquode.dao.simple;
 
+import java.util.List;
 import java.util.Set;
 import net.shtyftu.ubiquode.model.persist.simple.PersistEntity;
 
@@ -8,9 +9,13 @@ import net.shtyftu.ubiquode.model.persist.simple.PersistEntity;
  */
 public interface Dao<E extends PersistEntity> {
 
-    E getByKey(String key);
+    E getById(String key);
 
-    Set<String> getAllKeys();
+    Set<String> getAllIds();
+
+    List<E> getAll();
 
     void save(E entity);
+
+    void save(List<E> questProtoList);
 }

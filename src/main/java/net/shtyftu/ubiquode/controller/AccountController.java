@@ -36,7 +36,7 @@ public class AccountController {
             HttpServletRequest request) {
         try {
             request.login(login, password);
-            return "redirect:/quest/list";
+            return "redirect:" + AController.QUEST_CONTROLLER_PATH + AController.LIST_PATH;
         } catch (ServletException e) {
             e.printStackTrace();
         }
