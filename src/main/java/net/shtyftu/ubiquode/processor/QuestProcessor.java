@@ -58,8 +58,8 @@ public class QuestProcessor extends Processor<Quest, QuestEvent> {
         save(new QuestCompleteEvent(questId));
     }
 
-    public void enable(String questId) {
-        save(new QuestEnableEvent(questId));
+    public void enable(String questId, long deadline) {
+        save(new QuestEnableEvent(questId, deadline));
     }
 
     public void setProtoId(String questId, String protoId) {

@@ -35,9 +35,11 @@ public class UserProcessor extends Processor<User, UserEvent> {
         save(new UserQuestLockEvent(userId, questId));
     }
 
-    public void complete(String userId, String questId) {
+    public int complete(String userId, String questId) {
         final QuestProto questProto = questProtoDao.getById(questId);
-        save(new UserQuestCompleteEvent(userId, questProto.getScores()));
+        final int scores = questProto.getScores();
+        save(new UserQuestCompleteEvent(userId, scores));
+        return scores;
     }
 
     public String addNewQuestPack(String userId) {

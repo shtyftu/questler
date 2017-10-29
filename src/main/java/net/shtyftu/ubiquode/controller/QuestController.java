@@ -7,8 +7,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import net.shtyftu.ubiquode.model.QuestPack;
 import net.shtyftu.ubiquode.model.projection.Quest;
-import net.shtyftu.ubiquode.model.view.UserQuestView;
+import net.shtyftu.ubiquode.model.view.QuestView;
 import net.shtyftu.ubiquode.service.QuestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,20 +32,15 @@ public class QuestController extends AController {
         this.questService = questService;
     }
 
-    @RequestMapping(path = LIST_PATH, method = RequestMethod.GET)
-    public Map<String, Object> getList() {
-        return getDefaultViewModel();
-    }
-
     @Override
     protected Map<String, Object> getDefaultViewModel() {
         final String userId = getUserId();
-        final Map<String, List<Quest>> quests = questService.getAllFor(userId);
-        final List<UserQuestView> view = quests.entrySet().stream()
+        final Map<QuestPack, List<Quest>> quests = questService.getAllFor(userId);
+        final List<QuestView> view = quests.entrySet().stream()
                 .map(e -> {
-                    final String packName = e.getKey();
+                    final QuestPack pack = e.getKey();
                     return e.getValue().stream()
-                            .map(q -> new UserQuestView(q, userId, packName))
+                            .map(q -> new QuestView(userId, q, pack))
                             .collect(Collectors.toList());
                 })
                 .flatMap(Collection::stream)
@@ -54,11 +50,16 @@ public class QuestController extends AController {
         return ImmutableMap.of("list", view);
     }
 
+    @RequestMapping(path = LIST_PATH, method = RequestMethod.GET)
+    public Map<String, Object> getList() {
+        return getDefaultViewModel();
+    }
+
     @RequestMapping(value ="/enable", method = RequestMethod.POST)
     public String enable(
             @RequestParam(name = "questId") String questId,
             @RequestParam(name = "packId") String packId) {
-        boolean result = questService.enable(questId);
+        boolean result = questService.enable(questId, packId);
         return "redirect:/quest" + LIST_PATH;
     }
 
@@ -76,7 +77,7 @@ public class QuestController extends AController {
             @RequestParam(name = "questId") String questId,
             @RequestParam(name = "packId") String packId) {
         final String userId = getUserId();
-        boolean result = questService.complete(questId, userId);
+        boolean result = questService.complete(questId, userId, packId);
         return "redirect:/quest" + LIST_PATH;
     }
 

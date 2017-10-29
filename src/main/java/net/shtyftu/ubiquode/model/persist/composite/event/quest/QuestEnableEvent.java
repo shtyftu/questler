@@ -7,13 +7,16 @@ import net.shtyftu.ubiquode.model.projection.Quest;
  */
 public class QuestEnableEvent extends QuestEvent {
 
-    public QuestEnableEvent(String questId) {
+    private final long deadline;
+
+    public QuestEnableEvent(String questId, long deadline) {
         super(questId);
+        this.deadline = deadline;
     }
 
     @Override
     public void applyTo(Quest entity) {
         entity.setEnabled(true);
-        entity.setDeadlineAt(now() + entity.getProto().getDeadline());
+        entity.setDeadlineAt(getTime() + deadline);
     }
 }

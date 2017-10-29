@@ -10,7 +10,7 @@ import net.shtyftu.ubiquode.model.AModel;
 public class User extends AModel {
 
     private String name;
-    private Long scores;
+//    private Long scores;
     private String lockedQuestId;
     private Long mustCompleteQuestTill;
     private Long unableToLockQuestTill;
@@ -47,13 +47,13 @@ public class User extends AModel {
                 && mustCompleteQuestTill != null && now() < mustCompleteQuestTill;
     }
 
-    public int getScore() {
-        return score;
-    }
+//    public int getScore() {
+//        return score;
+//    }
 
-    public void setScore(int score) {
-        this.score = score;
-    }
+//    public void setScore(int score) {
+//        this.score = score;
+//    }
 
     public boolean isNeedToDealWithDeadline() {
         return true;

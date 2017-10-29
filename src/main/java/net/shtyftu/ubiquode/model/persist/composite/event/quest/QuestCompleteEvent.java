@@ -17,7 +17,5 @@ public class QuestCompleteEvent extends QuestEvent {
         final long cooldownTill = now() + entity.getProto().getCooldown();
         entity.setCooldownTill(cooldownTill);
         entity.setDeadlineAt(cooldownTill + entity.getProto().getDeadline());
-
-
     }
 }

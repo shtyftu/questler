@@ -7,9 +7,12 @@ import com.google.common.collect.ImmutableMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
+import net.shtyftu.ubiquode.dao.plain.AccountDao;
 import net.shtyftu.ubiquode.dao.plain.QuestProtoDao;
 import net.shtyftu.ubiquode.model.QuestPack;
+import net.shtyftu.ubiquode.model.persist.simple.Account;
 import net.shtyftu.ubiquode.model.persist.simple.QuestProto;
 import net.shtyftu.ubiquode.model.projection.Quest;
 import net.shtyftu.ubiquode.model.projection.User;
@@ -40,15 +43,18 @@ public class QuestPackController extends AController {
     private final QuestPackProcessor questPackProcessor;
     private final QuestProcessor questProcessor;
     private final QuestPackService questPackService;
+    private final AccountDao accountDao;
 
     @Autowired
     public QuestPackController(QuestProtoDao questProtoDao, UserProcessor userProcessor,
-            QuestPackProcessor questPackProcessor, QuestProcessor questProcessor, QuestPackService questPackService) {
+            QuestPackProcessor questPackProcessor, QuestProcessor questProcessor, QuestPackService questPackService,
+            AccountDao accountDao) {
         this.questProtoDao = questProtoDao;
         this.userProcessor = userProcessor;
         this.questPackProcessor = questPackProcessor;
         this.questProcessor = questProcessor;
         this.questPackService = questPackService;
+        this.accountDao = accountDao;
     }
 
     @RequestMapping(value = LIST_PATH, method = RequestMethod.GET)
@@ -79,16 +85,24 @@ public class QuestPackController extends AController {
     @RequestMapping(value = EDIT_PATH, method = RequestMethod.GET)
     public Map<String, Object> edit(@RequestParam(name = "packId") String packId) {
         final QuestPack pack = questPackProcessor.getById(packId);
-        final List<String> questIdList = pack.getQuestIdList();
-        final Map<String, String> questNamesById = questIdList.stream().map(questProcessor::getById)
+        final Set<String> questIds = pack.getProtoIdsByQuestId().keySet();
+        final Map<String, String> questNamesById = questIds.stream()
+                .map(questProcessor::getById)
                 .collect(Collectors.toMap(
                         Quest::getId,
                         q -> q.getProto().getName()));
+        final Map<String, String> userNamesById = pack.getUserScores().keySet().stream()
+                .collect(Collectors.toMap(id -> id, id -> id));
+        final QuestPackView packView = new QuestPackView(pack, questNamesById, userNamesById);
+
         final Map<String, String> protosView = questProtoDao.getAll().stream()
                 .collect(Collectors.toMap(QuestProto::getId, QuestProto::getName));
 
-        final QuestPackView packView = new QuestPackView(pack, questNamesById);
-        return ImmutableMap.of("pack", packView, "protos", protosView);
+        final String userId = getUserId();
+        final Map<Object, Object> invitesView = accountDao.getAll().stream()
+                .filter(a -> !userId.equals(a.getLogin()))
+                .collect(Collectors.toMap(Account::getLogin, Account::getLogin));
+        return ImmutableMap.of("pack", packView, "protos", protosView, "invites", invitesView);
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
@@ -98,9 +112,13 @@ public class QuestPackController extends AController {
 
         final List<String> errorProtoIds = new ArrayList<>();
         for (String protoId : pack.getProtoIds()) {
-            if (!questPackService.addQuestToPack(protoId, packId, userId)){
+            if (!questPackService.addQuest(protoId, packId, userId)){
                 errorProtoIds.add(protoId);
             }
+        }
+
+        for (String invitedId : pack.getInviteIds()) {
+            questPackService.addUser(packId, invitedId, userId);
         }
 
         if (CollectionUtils.isNotEmpty(errorProtoIds)) {
@@ -111,25 +129,13 @@ public class QuestPackController extends AController {
         }
     }
 
-//    @RequestMapping(value = "/quest/add", method = RequestMethod.POST)
-//    public ModelAndView addQuest(
-//            @RequestParam(name = "protoId") String protoId,
-//            @RequestParam(name = "packId") String packId) {
-//        final String userId = getUserId();
-//        if (!questPackService.addQuestToPack(protoId, packId, userId)) {
-//            return getDefaulView(ImmutableMap.of("errors", ImmutableList.of("something is wrong")));
-//        } else {
-//            return getDefaulView(ImmutableMap.of("messages", ImmutableList.of("pack [" + packId + "] created")));
-//        }
-//    }
-
     @RequestMapping(value = "/user/add", method = RequestMethod.POST)
     public ModelAndView addUser(
             @RequestParam(name = "userId") String userId,
             @RequestParam(name = "packId") String packId) {
         final String currentUserId = getUserId();
-        userProcessor.addQuestPack(userId, packId, currentUserId);
-        return getDefaulView(ImmutableMap.of("messages", ImmutableList.of("pack [" + packId + "] created")));
+        questPackService.addUser(packId, userId, currentUserId);
+        return getDefaulView(ImmutableMap.of("messages", ImmutableList.of("User [" + userId + "] added to Pack")));
     }
 
 }

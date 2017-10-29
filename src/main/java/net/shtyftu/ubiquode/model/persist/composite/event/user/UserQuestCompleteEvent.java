@@ -16,7 +16,7 @@ public class UserQuestCompleteEvent extends UserEvent {
 
     @Override
     public void applyTo(User user) {
-        user.setScore(user.getScore() + scores);
+//        user.setScore(user.getScore() + scores);
         user.setLockedQuestId(null);
         user.setUnableToLockQuestTill(null);
         user.setMustCompleteQuestTill(null);

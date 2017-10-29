@@ -13,23 +13,18 @@ import java.util.Map.Entry;
 public class QuestPack extends AModel {
 
     private final String id;
-    //TODO change to proto Map
-    private List<String> questIdList;
+    private Map<String, String> protosByQuestId;
     private String name;
     private Map<String, Integer> userScores;
 
     public QuestPack(String id) {
         this.id = id;
-        questIdList = new ArrayList<>();
+        protosByQuestId = new HashMap<>();
         userScores = new HashMap<>();
     }
 
     public String getId() {
         return id;
-    }
-
-    public List<String> getQuestIdList() {
-        return questIdList;
     }
 
     public String getName() {
@@ -38,6 +33,10 @@ public class QuestPack extends AModel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Map<String, String> getProtoIdsByQuestId() {
+        return protosByQuestId;
     }
 
     public Map<String, Integer> getUserScores() {

@@ -9,17 +9,19 @@ import net.shtyftu.ubiquode.model.QuestPack;
 public class QuestPackAddQuestEvent extends QuestPackEvent {
 
     private final String userId;
+    private final String protoId;
     private final String questId;
 
-    public QuestPackAddQuestEvent(String packId, String userId) {
+    public QuestPackAddQuestEvent(String packId, String userId, String protoId) {
         super(packId);
         this.userId = userId;
+        this.protoId = protoId;
         this.questId = UUID.randomUUID().toString();
     }
 
     @Override
     public void applyTo(QuestPack questPack) {
-        questPack.getQuestIdList().add(questId);
+        questPack.getProtoIdsByQuestId().put(questId, protoId);
     }
 
     public String getQuestId() {

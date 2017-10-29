@@ -12,7 +12,7 @@ public class QuestPackLightView {
     private final int questCount;
 
     public QuestPackLightView(QuestPack questPack) {
-        this(questPack.getId(), questPack.getName(), questPack.getQuestIdList().size());
+        this(questPack.getId(), questPack.getName(), questPack.getProtoIdsByQuestId().entrySet().size());
     }
 
     private QuestPackLightView(String id, String name, int questCount) {
