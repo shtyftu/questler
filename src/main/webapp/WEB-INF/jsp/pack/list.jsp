@@ -9,7 +9,7 @@
                 <tr>
                     <td>Create new Quest Pack:</td>
                     <td><input type="text" placeholder="Name" name="name" required="required"/></td>
-                    <td><a href="/pack/create">Export QuestProto list json file</a></td>
+                    <%--<td><a href="/pack/create"><button>Create</button></a></td>--%>
                     <td><input type="submit" value="Create"/></td>
                 </tr>
             </table>
@@ -25,7 +25,7 @@
                 <tr>
                     <td>${pack.name}</td>
                     <td>${pack.questCount}</td>
-                    <td><a href="/pack/edit?packId="${pack.id}>Edit</a></td>
+                    <td><a href="/pack/edit?packId=${pack.id}">Edit</a></td>
                 </tr>
             </c:forEach>
             <tr>

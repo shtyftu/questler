@@ -5,36 +5,66 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <t:page>
     <jsp:body>
-        <form action="/pack/save" method="post">
-            <input type="hidden" name="packId" value="${pack.id}">
+        <form:form method="POST" action="/pack/save" modelAttribute="pack" onsubmit="disableEmptySelect();">
+            <form:hidden path="id"/>
             <h3>Editing Quest Pack "${pack.name}"</h3>
-            <table>
-                <c:forEach var="entry" items="${pack.questNameById}" varStatus="loop">
-                    <tr>
-                            <%--<form:input path="sections[0]" />--%>
-                        <input type="hidden" name="q[${loop.index}].id" value="${entry.key}"/>
-                        <td>${loop.index}</td>
-                        <td>${entry.value}</td>
-                        <td><button>Delete</button></td>
-                            <%--<td><a href="/pack/edit?packId="${pack.id}>Edit</td>--%>
-                    </tr>
+            <div class="container">
+                <c:forEach var="entry" items="${pack.questNamesById}" varStatus="loop">
+                    <div class="row">
+                        <form:hidden path="questNamesById[${entry.key}]"/>
+                        <div class="col">${entry.value}</div>
+                        <div class="col">
+                            <button>Delete</button>
+                        </div>
+                    </div>
                 </c:forEach>
-                <tr>
-                    <td></td>
-                    <td>
-                        <form:select path="q[-1].protoId">
-                            <form:options items="${protos}" itemValue="key" itemLabel="value" />
-                        </form:select>
-                    </td>
-                    <td>
-                        <button>New</button>
-                    </td>
-                </tr>
-                <input type="submit">
-            </table>
-        </form>
+                <div class="row">
+                    <div class="col"></div>
+                    <div class="col">
+                        <select name="protoIds[-1]" class="quest-select" onchange="onProtoSelect()">
+                            <option value=""></option>
+                            <c:forEach items="${protos}" var="proto">
+                                <option value="${proto.key}">${proto.value}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <button style="display: none;">Delete</button>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col">Cancel</div>
+                    <div class="col"><input type="submit" value="Save"></div>
+                </div>
+            </div>
+        </form:form>
+        <script>
+          function onProtoSelect() {
+            var needAddRow = true;
+            var $questSelect = $(".quest-select");
+            $questSelect.each(function (index, obj) {
+              $(obj).attr("name", "protoIds[" + index + "]");
+              if ($(obj).val()) {
+                var $delButton = $(obj).parents(".row").find("button");
+                $delButton.show();
+              } else {
+                needAddRow = false;
+              }
+            });
+            if (needAddRow) {
+              var $lastRow = $questSelect.last().parents(".row");
+              var $cloneRow = $lastRow.clone().appendTo($lastRow.parent());
+              $cloneRow.find("button").hide();
+              $cloneRow.find(".quest-select").attr("name", "protoIds[-1]")
+            }
+          }
+          function disableEmptySelect() {
+            debugger;
+            var $emptySelect = $('.quest-select[name="protoIds[-1]"]');
+            $emptySelect.attr("disabled", "disabled");
+          }
+        </script>
     </jsp:body>
-    <%--<jsp:attribute name="footer">--%>
-      <%--<p id="copyright">questler-life by shtyftu 2017</p>--%>
-    <%--</jsp:attribute>--%>
 </t:page>

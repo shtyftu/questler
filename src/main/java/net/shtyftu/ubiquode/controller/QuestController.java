@@ -27,11 +27,17 @@ public class QuestController extends AController {
 
     @Autowired
     public QuestController(QuestService questService) {
+        super();
         this.questService = questService;
     }
 
     @RequestMapping(path = LIST_PATH, method = RequestMethod.GET)
     public Map<String, Object> getList() {
+        return getDefaultViewModel();
+    }
+
+    @Override
+    protected Map<String, Object> getDefaultViewModel() {
         final String userId = getUserId();
         final Map<String, List<Quest>> quests = questService.getAllFor(userId);
         final List<UserQuestView> view = quests.entrySet().stream()
