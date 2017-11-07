@@ -5,6 +5,7 @@ import static net.shtyftu.ubiquode.controller.AController.PACK_CONTROLLER_PATH;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -106,19 +107,31 @@ public class QuestPackController extends AController {
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public ModelAndView save(@ModelAttribute("pack") QuestPackView pack) {
+    public ModelAndView save(@ModelAttribute("pack") QuestPackView packView) {
         final String userId = getUserId();
-        final String packId = pack.getId();
+        final String packId = packView.getId();
+
+        final QuestPack questPack = questPackProcessor.getById(packId);
+        final Collection<String> currentProtoIds = questPack.getProtoIdsByQuestId().values();
 
         final List<String> errorProtoIds = new ArrayList<>();
-        for (String protoId : pack.getProtoIds()) {
-            if (!questPackService.addQuest(protoId, packId, userId)){
-                errorProtoIds.add(protoId);
+        final List<String> protoIds = packView.getProtoIds();
+        if (CollectionUtils.isNotEmpty(protoIds)) {
+            for (String protoId : protoIds) {
+                if (currentProtoIds.contains(protoId)) {
+                    continue;
+                }
+                if (!questPackService.addQuest(protoId, packId, userId)) {
+                    errorProtoIds.add(protoId);
+                }
             }
         }
 
-        for (String invitedId : pack.getInviteIds()) {
-            questPackService.addUser(packId, invitedId, userId);
+        final List<String> inviteIds = packView.getInviteIds();
+        if (CollectionUtils.isNotEmpty(inviteIds)) {
+            for (String invitedId : inviteIds) {
+                questPackService.addUser(packId, invitedId, userId);
+            }
         }
 
         if (CollectionUtils.isNotEmpty(errorProtoIds)) {

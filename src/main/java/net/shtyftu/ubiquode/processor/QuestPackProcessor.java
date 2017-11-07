@@ -1,6 +1,6 @@
 package net.shtyftu.ubiquode.processor;
 
-import net.shtyftu.ubiquode.dao.composite.event.QuestPackEventDao;
+import net.shtyftu.ubiquode.dao.list.event.QuestPackEventDao;
 import net.shtyftu.ubiquode.dao.plain.QuestProtoDao;
 import net.shtyftu.ubiquode.model.QuestPack;
 import net.shtyftu.ubiquode.model.persist.composite.event.questPack.QuestPackAddQuestEvent;

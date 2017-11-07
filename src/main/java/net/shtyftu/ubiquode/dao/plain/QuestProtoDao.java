@@ -1,5 +1,6 @@
 package net.shtyftu.ubiquode.dao.plain;
 
+import com.google.gson.reflect.TypeToken;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.PostConstruct;
 import net.shtyftu.ubiquode.model.persist.simple.QuestProto;
@@ -9,11 +10,16 @@ import org.springframework.stereotype.Component;
  * @author shtyftu
  */
 @Component
-public class QuestProtoDao extends HashMapDao<QuestProto> {
+public class QuestProtoDao extends RedisModelWithIdDao<QuestProto> {
+
+    public QuestProtoDao() {
+        super(new TypeToken<QuestProto>() {
+        });
+    }
 
     @PostConstruct
     public void init() {
         save(new QuestProto("id1", "clean table", TimeUnit.HOURS.toMillis(6), TimeUnit.HOURS.toMillis(24), 11));
-        save(new QuestProto("id2", "move clothes", TimeUnit.HOURS.toMillis(12),TimeUnit.HOURS.toMillis(48), 12));
+        save(new QuestProto("id2", "move clothes", TimeUnit.HOURS.toMillis(12), TimeUnit.HOURS.toMillis(48), 12));
     }
 }
