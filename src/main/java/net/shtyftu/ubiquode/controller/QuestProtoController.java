@@ -51,7 +51,6 @@ public class QuestProtoController {
         return ImmutableMap.of("list", list);
     }
 
-    //    @RequestMapping(value = "/export", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @RequestMapping(value = "/export",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)

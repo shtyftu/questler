@@ -9,13 +9,15 @@ public class QuestProto extends ModelWithId {
     private Long cooldown;
     private Long deadline;
     private int scores;
+    private boolean activatedByTrigger;
 
-    public QuestProto(String id, String name, Long cooldown, Long deadline, int scores) {
+    public QuestProto(String id, String name, Long cooldown, Long deadline, int scores, boolean activatedByTrigger) {
         super(id);
         this.name = name;
         this.cooldown = cooldown;
         this.deadline = deadline;
         this.scores = scores;
+        this.activatedByTrigger = activatedByTrigger;
     }
     
 
@@ -33,5 +35,9 @@ public class QuestProto extends ModelWithId {
 
     public int getScores() {
         return scores;
+    }
+
+    public boolean isActivatedByTrigger() {
+        return activatedByTrigger;
     }
 }

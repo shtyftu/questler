@@ -44,6 +44,11 @@ public class QuestView implements Comparable<QuestView> {
                 this.actionLink = "";
                 this.actionName = "";
                 break;
+            case WaitingTrigger:
+                this.time = null;
+                this.actionLink = getLink("trigger");
+                this.actionName = "Trigger";
+                break;
             case Disabled:
                 this.time = null;
                 this.actionLink = getLink("enable");

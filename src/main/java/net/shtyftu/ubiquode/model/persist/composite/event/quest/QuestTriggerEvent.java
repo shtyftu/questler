@@ -5,21 +5,20 @@ import net.shtyftu.ubiquode.model.projection.Quest;
 /**
  * @author shtyftu
  */
-public class QuestEnableEvent extends QuestEvent {
+public class QuestTriggerEvent extends QuestEvent {
 
     private final long deadline;
 
-    public QuestEnableEvent(String questId, long deadline) {
+
+    public QuestTriggerEvent(String questId, long deadline) {
         super(questId);
         this.deadline = deadline;
     }
 
     @Override
     public void applyTo(Quest quest) {
-        quest.setEnabled(true);
-        if (quest.getProto().isActivatedByTrigger()) {
-            quest.setWaitTrigger(true);
-        } else {
+        if (quest.getProto().isActivatedByTrigger() && quest.isWaitTrigger()) {
+            quest.setWaitTrigger(false);
             quest.setDeadlineAt(getTime() + deadline);
         }
     }

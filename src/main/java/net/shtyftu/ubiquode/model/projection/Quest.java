@@ -16,6 +16,7 @@ public class Quest extends AModel {
     private String userId;
     private boolean enabled;
     private String protoId;
+    private boolean waitTrigger;
     private transient QuestProto proto;
 
     public Quest(String id) {
@@ -41,6 +42,9 @@ public class Quest extends AModel {
     public State getState() {
         if (!enabled) {
             return State.Disabled;
+        }
+        if (waitTrigger) {
+            return State.WaitingTrigger;
         }
         if (lockedTill != null && now() < lockedTill) {
             return State.LockedByUser;
@@ -95,9 +99,18 @@ public class Quest extends AModel {
         return id;
     }
 
+    public boolean isWaitTrigger() {
+        return waitTrigger;
+    }
+
+    public void setWaitTrigger(boolean waitTrigger) {
+        this.waitTrigger = waitTrigger;
+    }
+
     public enum State {
         Disabled(24),
         Available(20),
+        WaitingTrigger(25),
         OnCooldown(30),
         LockedByUser(26),
         DeadlinePanic(10);

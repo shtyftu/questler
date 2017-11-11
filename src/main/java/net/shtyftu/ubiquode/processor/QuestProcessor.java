@@ -7,6 +7,7 @@ import net.shtyftu.ubiquode.model.persist.composite.event.quest.QuestEnableEvent
 import net.shtyftu.ubiquode.model.persist.composite.event.quest.QuestEvent;
 import net.shtyftu.ubiquode.model.persist.composite.event.quest.QuestLockEvent;
 import net.shtyftu.ubiquode.model.persist.composite.event.quest.QuestSetProtoIdEvent;
+import net.shtyftu.ubiquode.model.persist.composite.event.quest.QuestTriggerEvent;
 import net.shtyftu.ubiquode.model.persist.simple.QuestProto;
 import net.shtyftu.ubiquode.model.projection.Quest;
 import org.apache.commons.lang3.StringUtils;
@@ -60,6 +61,10 @@ public class QuestProcessor extends Processor<Quest, QuestEvent> {
 
     public void enable(String questId, long deadline) {
         save(new QuestEnableEvent(questId, deadline));
+    }
+
+    public void trigger(String questId, long deadline) {
+        save(new QuestTriggerEvent(questId, deadline));
     }
 
     public void setProtoId(String questId, String protoId) {

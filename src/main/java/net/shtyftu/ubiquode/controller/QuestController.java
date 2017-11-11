@@ -63,6 +63,13 @@ public class QuestController extends AController {
         return "redirect:/quest" + LIST_PATH;
     }
 
+    @RequestMapping(value ="/trigger", method = RequestMethod.POST)
+    public String trigger(
+            @RequestParam(name = "questId") String questId) {
+        boolean result = questService.trigger(questId);
+        return "redirect:/quest" + LIST_PATH;
+    }
+
     @RequestMapping(value="/lock", method = RequestMethod.POST)
     public String lock(
             @RequestParam(name = "questId") String questId,

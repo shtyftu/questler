@@ -108,4 +108,15 @@ public class QuestService {
     private Quest get(String questId) {
         return questProcessor.getById(questId);
     }
+
+    public boolean trigger(String questId) {
+        final Quest quest = get(questId);
+        final QuestProto proto = quest.getProto();
+        if (proto.isActivatedByTrigger() && State.WaitingTrigger.equals(quest.getState())){
+            final Long deadline = proto.getDeadline();
+            questProcessor.trigger(questId, deadline);
+            return true;
+        }
+        return false;
+    }
 }

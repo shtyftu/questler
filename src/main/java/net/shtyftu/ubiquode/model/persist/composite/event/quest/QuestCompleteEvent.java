@@ -12,10 +12,14 @@ public class QuestCompleteEvent extends QuestEvent {
     }
 
     @Override
-    public void applyTo(Quest entity) {
-        entity.setLockedTill(null);
-        final long cooldownTill = now() + entity.getProto().getCooldown();
-        entity.setCooldownTill(cooldownTill);
-        entity.setDeadlineAt(cooldownTill + entity.getProto().getDeadline());
+    public void applyTo(Quest quest) {
+        quest.setLockedTill(null);
+        if (quest.getProto().isActivatedByTrigger()) {
+            quest.setWaitTrigger(true);
+        } else {
+            final long cooldownTill = now() + quest.getProto().getCooldown();
+            quest.setCooldownTill(cooldownTill);
+            quest.setDeadlineAt(cooldownTill + quest.getProto().getDeadline());
+        }
     }
 }
