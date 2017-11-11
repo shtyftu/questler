@@ -30,25 +30,7 @@ public class QuestProcessor extends Processor<Quest, QuestEvent> {
 
     @Override
     protected Quest createNew(String questId) {
-        return new Quest(questId);
-    }
-
-    @Override
-    public Quest getById(String id) {
-        final Quest quest = super.getById(id);
-        if (quest.getProto() == null) {
-            final String protoId = quest.getProtoId();
-            if (StringUtils.isBlank(protoId)) {
-                throw new IllegalStateException("there is no protoId for quest [" + id + "]");
-            }
-            final QuestProto proto = protoDao.getById(protoId);
-            if (proto == null) {
-                throw new IllegalStateException(
-                        "there is no proto for protoId [" + protoId + "] for questId [" + id +"]");
-            }
-            quest.setProto(proto);
-        }
-        return quest;
+        return new Quest(questId, protoDao);
     }
 
     public void lock(String questId, String userId) {

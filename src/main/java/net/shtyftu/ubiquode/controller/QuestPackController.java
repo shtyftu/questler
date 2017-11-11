@@ -78,8 +78,7 @@ public class QuestPackController extends AController {
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ModelAndView create(@RequestParam(name = "name") String name) {
         final String userId = getUserId();
-        final String packId = userProcessor.addNewQuestPack(userId);
-        questPackProcessor.setName(packId, name);
+        final String packId = questPackService.create(name, userId);
         return getDefaulView(ImmutableMap.of("messages", ImmutableList.of("pack [" + packId + "] created")));
     }
 
@@ -129,8 +128,12 @@ public class QuestPackController extends AController {
 
         final List<String> inviteIds = packView.getInviteIds();
         if (CollectionUtils.isNotEmpty(inviteIds)) {
+            final Set<String> packOldUsers = questPack.getUserScores().keySet();
             for (String invitedId : inviteIds) {
-                questPackService.addUser(packId, invitedId, userId);
+                if (!packOldUsers.contains(invitedId)) {
+                    questPackService.addUser(packId, invitedId, userId);
+
+                }
             }
         }
 
@@ -142,13 +145,13 @@ public class QuestPackController extends AController {
         }
     }
 
-    @RequestMapping(value = "/user/add", method = RequestMethod.POST)
-    public ModelAndView addUser(
-            @RequestParam(name = "userId") String userId,
-            @RequestParam(name = "packId") String packId) {
-        final String currentUserId = getUserId();
-        questPackService.addUser(packId, userId, currentUserId);
-        return getDefaulView(ImmutableMap.of("messages", ImmutableList.of("User [" + userId + "] added to Pack")));
-    }
+//    @RequestMapping(value = "/user/add", method = RequestMethod.POST)
+//    public ModelAndView addUser(
+//            @RequestParam(name = "userId") String userId,
+//            @RequestParam(name = "packId") String packId) {
+//        final String currentUserId = getUserId();
+//        questPackService.addUser(packId, userId, currentUserId);
+//        return getDefaulView(ImmutableMap.of("messages", ImmutableList.of("User [" + userId + "] added to Pack")));
+//    }
 
 }

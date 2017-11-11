@@ -1,9 +1,7 @@
 package net.shtyftu.ubiquode.model;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -41,10 +39,6 @@ public class QuestPack extends AModel {
 
     public Map<String, Integer> getUserScores() {
         return userScores;
-    }
-
-    public void setUserScores(Map<String, Integer> userScores) {
-        this.userScores = userScores;
     }
 
     public String getLowestScoreUser() {

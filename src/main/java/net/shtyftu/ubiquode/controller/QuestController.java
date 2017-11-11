@@ -4,11 +4,13 @@ import static net.shtyftu.ubiquode.controller.AController.QUEST_CONTROLLER_PATH;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import net.shtyftu.ubiquode.model.QuestPack;
 import net.shtyftu.ubiquode.model.projection.Quest;
+import net.shtyftu.ubiquode.model.view.QuestScoresView;
 import net.shtyftu.ubiquode.model.view.QuestView;
 import net.shtyftu.ubiquode.service.QuestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +38,7 @@ public class QuestController extends AController {
     protected Map<String, Object> getDefaultViewModel() {
         final String userId = getUserId();
         final Map<QuestPack, List<Quest>> quests = questService.getAllFor(userId);
-        final List<QuestView> view = quests.entrySet().stream()
+        final List<QuestView> questListView = quests.entrySet().stream()
                 .map(e -> {
                     final QuestPack pack = e.getKey();
                     return e.getValue().stream()
@@ -47,7 +49,12 @@ public class QuestController extends AController {
                 .sorted()
                 .collect(Collectors.toList());
 
-        return ImmutableMap.of("list", view);
+        final List<QuestScoresView> scoresListView = quests.keySet().stream()
+                .map(QuestScoresView::new)
+                .sorted(Comparator.comparing(QuestScoresView::getPackName))
+                .collect(Collectors.toList());
+
+        return ImmutableMap.of("questList", questListView, "scoresList",  scoresListView);
     }
 
     @RequestMapping(path = LIST_PATH, method = RequestMethod.GET)

@@ -86,8 +86,13 @@ public class QuestService {
         if (!user.isCanCompleteQuest(questId)) {
             return false;
         }
+
         questProcessor.complete(questId);
-        final int scores = userProcessor.complete(userId, questId);
+        final QuestPack questPack = questPackProcessor.getById(packId);
+        final String protoId = questPack.getProtoIdsByQuestId().get(questId);
+        final QuestProto questProto = questProtoDao.getById(protoId);
+        final int scores = questProto.getScores();
+        userProcessor.complete(userId, scores);
         questPackProcessor.addScores(packId, userId, scores);
         return true;
     }

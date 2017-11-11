@@ -1,8 +1,10 @@
 package net.shtyftu.ubiquode.model.projection;
 
+import net.shtyftu.ubiquode.dao.plain.QuestProtoDao;
 import net.shtyftu.ubiquode.model.AModel;
 import net.shtyftu.ubiquode.model.persist.simple.QuestProto;
 import net.shtyftu.ubiquode.service.ConfigService;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author shtyftu
@@ -17,10 +19,12 @@ public class Quest extends AModel {
     private boolean enabled;
     private String protoId;
     private boolean waitTrigger;
+    private transient final QuestProtoDao protoDao;
     private transient QuestProto proto;
 
-    public Quest(String id) {
+    public Quest(String id, QuestProtoDao protoDao) {
         this.id = id;
+        this.protoDao = protoDao;
     }
 
     public void setDeadlineAt(Long deadlineAt) {
@@ -60,6 +64,17 @@ public class Quest extends AModel {
 
 
     public QuestProto getProto() {
+        if (proto == null) {
+            if (StringUtils.isBlank(protoId)) {
+                throw new IllegalStateException("there is no protoId for quest [" + id + "]");
+            }
+            final QuestProto proto = protoDao.getById(protoId);
+            if (proto == null) {
+                throw new IllegalStateException(
+                        "there is no proto for protoId [" + protoId + "] for questId [" + id + "]");
+            }
+            this.proto = proto;
+        }
         return proto;
     }
 
@@ -108,12 +123,12 @@ public class Quest extends AModel {
     }
 
     public enum State {
-        Disabled(24),
+        LockedByUser(8),
+        DeadlinePanic(15),
         Available(20),
         WaitingTrigger(25),
         OnCooldown(30),
-        LockedByUser(26),
-        DeadlinePanic(10);
+        Disabled(34);
 
         private final int order;
 

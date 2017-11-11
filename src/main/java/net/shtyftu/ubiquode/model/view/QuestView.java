@@ -17,6 +17,7 @@ public class QuestView implements Comparable<QuestView> {
     private final String actionName;
     private final String actionLink;
     private final Long time;
+    private final Integer scores;
     private transient final int order;
 
     public QuestView(String userId, Quest quest, QuestPack pack) {
@@ -24,6 +25,7 @@ public class QuestView implements Comparable<QuestView> {
         this.name = quest.getProto().getName();
         this.packId = pack.getId();
         this.packName = pack.getName();
+        this.scores = quest.getProto().getScores();
         final State state = quest.getState();
         this.state = state.name();
         this.order = state.getOrder();
@@ -103,6 +105,10 @@ public class QuestView implements Comparable<QuestView> {
 
     public String getActionLink() {
         return actionLink;
+    }
+
+    public Integer getScores() {
+        return scores;
     }
 
     @Override

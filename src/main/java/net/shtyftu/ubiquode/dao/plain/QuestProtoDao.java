@@ -16,10 +16,4 @@ public class QuestProtoDao extends RedisModelWithIdDao<QuestProto> {
         super(new TypeToken<QuestProto>() {
         });
     }
-
-    @PostConstruct
-    public void init() {
-        save(new QuestProto("id1", "clean table", TimeUnit.HOURS.toMillis(6), TimeUnit.HOURS.toMillis(24), 11));
-        save(new QuestProto("id2", "move clothes", TimeUnit.HOURS.toMillis(12), TimeUnit.HOURS.toMillis(48), 12));
-    }
 }

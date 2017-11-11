@@ -15,14 +15,23 @@ public class QuestPackService {
 
     private final QuestPackProcessor questPackProcessor;
     private final QuestProcessor questProcessor;
+    private final QuestService questService;
     private final UserProcessor userProcessor;
 
     @Autowired
     public QuestPackService(QuestPackProcessor questPackProcessor, QuestProcessor questProcessor,
-            UserProcessor userProcessor) {
+            QuestService questService, UserProcessor userProcessor) {
         this.questPackProcessor = questPackProcessor;
         this.questProcessor = questProcessor;
+        this.questService = questService;
         this.userProcessor = userProcessor;
+    }
+
+    public String create(String name, String userId) {
+        final String packId = userProcessor.addNewQuestPack(userId);
+        questPackProcessor.setName(packId, name);
+        questPackProcessor.addUser(packId, userId, userId);
+        return packId;
     }
 
     public boolean addQuest(String protoId, String packId, String userId) {
@@ -31,6 +40,7 @@ public class QuestPackService {
             return false;
         }
         questProcessor.setProtoId(questId, protoId);
+        questService.enable(questId, packId);
         return true;
     }
 

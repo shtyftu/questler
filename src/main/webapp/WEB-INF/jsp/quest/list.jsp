@@ -5,21 +5,36 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <t:page>
     <jsp:body>
+        <h3>Your quests:</h3>
         <div class="container">
-            <c:set var="index" value="1"/>
-            <c:forEach var="quest" items="${list}">
+            <c:forEach var="quest" items="${questList}">
                 <div class="row">
-                    <div class="col">${index}</div>
-                    <c:set var="index" value="${index + 1}"/>
                     <div class="col">${quest.name}</div>
+                    <div class="col">${quest.scores}</div>
                     <div class="col">${quest.state}</div>
                     <div class="col timer" data-time="${quest.time}"></div>
                     <div class="col">
-                        <form:form method="POST" action="${quest.actionLink}">
-                            <input type="submit" value="${quest.actionName}"/>
-                        </form:form>
+                        <c:if test="${not empty quest.actionLink}">
+                            <form:form method="POST" action="${quest.actionLink}">
+                                <input type="submit" class="btn btn-default" value="${quest.actionName}"/>
+                            </form:form>
+                        </c:if>
                     </div>
                 </div>
+            </c:forEach>
+        </div>
+        <br/>
+        <h3>Scoreboards:</h3>
+        <div class="container">
+            <c:forEach var="scores" items="${scoresList}">
+                <div class="row">${scores.packName}</div>
+                <c:forEach var="scoreLine" items="${scores.scores}">
+                    <div class="row">
+                        <div class="col">${scoreLine.key}</div>
+                        <div class="col">${scoreLine.value}</div>
+                    </div>
+                </c:forEach>
+                <br>
             </c:forEach>
         </div>
         <script>

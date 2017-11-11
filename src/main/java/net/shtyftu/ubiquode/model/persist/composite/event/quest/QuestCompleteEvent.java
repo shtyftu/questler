@@ -17,7 +17,7 @@ public class QuestCompleteEvent extends QuestEvent {
         if (quest.getProto().isActivatedByTrigger()) {
             quest.setWaitTrigger(true);
         } else {
-            final long cooldownTill = now() + quest.getProto().getCooldown();
+            final long cooldownTill = getTime() + quest.getProto().getCooldown();
             quest.setCooldownTill(cooldownTill);
             quest.setDeadlineAt(cooldownTill + quest.getProto().getDeadline());
         }

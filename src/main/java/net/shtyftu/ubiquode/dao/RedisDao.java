@@ -3,10 +3,15 @@ package net.shtyftu.ubiquode.dao;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lambdaworks.redis.RedisClient;
-import com.lambdaworks.redis.api.StatefulRedisConnection;
 import com.lambdaworks.redis.api.sync.RedisCommands;
+import com.lambdaworks.redis.api.sync.RedisStringCommands;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -17,9 +22,13 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class RedisDao<E> {
 
+    private static final int CONNECTION_MAX_COUNT = 50;
     private static final String REDIS_HOST = "redis://localhost";
     private static final Gson GSON = new Gson();
-    private static final StatefulRedisConnection<String, String> connection = RedisClient.create(REDIS_HOST).connect();
+
+    private static final RedisClient client = RedisClient.create(REDIS_HOST);
+    private static final List<RedisCommands<String, String>> connectionPool = new ArrayList<>();
+    private static final AtomicInteger connectionCounter = new AtomicInteger();
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -37,7 +46,20 @@ public abstract class RedisDao<E> {
     }
 
     protected RedisCommands<String, String> redisCmd() {
-        return connection.sync();
+        synchronized (connectionPool) {
+            int counter = connectionCounter.get();
+            if (counter == CONNECTION_MAX_COUNT) {
+                counter = connectionCounter.addAndGet(-CONNECTION_MAX_COUNT);
+            }
+
+            final int size = connectionPool.size();
+            if (size < counter + 1) {
+                connectionPool.add(client.connect().sync());
+                return redisCmd();
+            }
+            connectionCounter.incrementAndGet();
+            return connectionPool.get(counter);
+        }
     }
 
     protected String serialize(E e) {
@@ -67,13 +89,6 @@ public abstract class RedisDao<E> {
         SerializedEntity(String className, String string) {
             this.className = className;
             this.entityString = string;
-        }
-    }
-
-    private static class DeserializeException extends IllegalArgumentException{
-
-        DeserializeException(Throwable cause) {
-            super(cause);
         }
     }
 
