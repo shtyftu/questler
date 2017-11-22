@@ -56,7 +56,7 @@ public class Quest extends AModel {
         if (cooldownTill != null && now() < cooldownTill) {
             return State.OnCooldown;
         }
-        if (deadlineAt != null && now() > deadlineAt + ConfigService.PANIC_TIME_BEFORE_DEADLINE) {
+        if (deadlineAt != null && now() > deadlineAt - ConfigService.PANIC_TIME_BEFORE_DEADLINE) {
             return State.DeadlinePanic;
         }
         return State.Available;
