@@ -7,7 +7,8 @@
 </div>
 <script>
   function millisToString(millis) {
-    var result = "";
+    var negative= millis < 0,
+        result = "";
     function addToResult(count) {
       if (count || result) {
         if (result) {
@@ -16,7 +17,9 @@
         result += count;
       }
     }
-
+    if (negative) {
+        millis = -millis;
+    }
     var seconds = Math.floor(millis / 1000);
 
     var years = Math.floor(seconds / 31536000);
@@ -36,6 +39,9 @@
     seconds -= minutes * 60;
 
     addToResult(seconds);
+    if (negative) {
+      result = "-" + result;
+    }
     return result;
   }
 </script>
