@@ -60,7 +60,7 @@ public class QuestProtoController {
             IOUtils.copy(new StringReader(GSON.toJson(dump)), response.getOutputStream());
             response.flushBuffer();
         } catch (IOException ex) {
-            throw new RuntimeException("IOError writing file to output stream");
+            throw new IllegalStateException("IOError writing file to output stream");
         }
     }
 

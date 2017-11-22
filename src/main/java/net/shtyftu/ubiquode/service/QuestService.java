@@ -2,6 +2,7 @@ package net.shtyftu.ubiquode.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import net.shtyftu.ubiquode.dao.plain.QuestProtoDao;
 import net.shtyftu.ubiquode.model.QuestPack;
@@ -45,12 +46,22 @@ public class QuestService {
                         pack -> pack,
                         pack -> pack.getProtoIdsByQuestId().keySet().stream()
                                 .map(questProcessor::getById)
+                                .filter(Objects::nonNull)
                                 .collect(Collectors.toList())));
     }
 
     public boolean lock(String questId, String userId, String packId) {
         final Quest quest = get(questId);
         final State state = quest.getState();
+        if (!canBeLocked(userId, packId, state)) {
+            return false;
+        }
+        questProcessor.lock(questId, userId);
+        userProcessor.lock(userId, questId);
+        return true;
+    }
+
+    public boolean canBeLocked(String userId, String packId, State state) {
         if (!State.Available.equals(state) && !State.DeadlinePanic.equals(state)) {
             return false;
         }
@@ -59,6 +70,7 @@ public class QuestService {
         if (State.DeadlinePanic != state) {
             final List<Quest> deadlinePanicQuests = questPack.getProtoIdsByQuestId().keySet().stream()
                     .map(questProcessor::getById)
+                    .filter(Objects::nonNull)
                     .filter(q -> State.DeadlinePanic == q.getState())
                     .collect(Collectors.toList());
             if (CollectionUtils.isNotEmpty(deadlinePanicQuests) && userId.equals(questPack.getLowestScoreUser())) {
@@ -73,8 +85,6 @@ public class QuestService {
             }
 
         }
-        questProcessor.lock(questId, userId);
-        userProcessor.lock(userId, questId);
         return true;
     }
 

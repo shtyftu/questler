@@ -20,13 +20,16 @@ public class QuestView implements Comparable<QuestView> {
     private final Integer scores;
     private transient final int order;
 
-    public QuestView(String userId, Quest quest, QuestPack pack) {
+    public QuestView(String userId, Quest quest, QuestPack pack, boolean canBeLocked) {
         this.id = quest.getId();
         this.name = quest.getProto().getName();
         this.packId = pack.getId();
         this.packName = pack.getName();
         this.scores = quest.getProto().getScores();
-        final State state = quest.getState();
+        State state = quest.getState();
+        if (state == State.Available && !canBeLocked) {
+            state = State.Unavailable;
+        }
         this.state = state.name();
         this.order = state.getOrder();
 
@@ -36,10 +39,15 @@ public class QuestView implements Comparable<QuestView> {
                 this.actionLink = getLink("lock");
                 this.actionName = "Lock";
                 break;
+            case Unavailable:
+                this.time = null;
+                this.actionLink = "";
+                this.actionName = "";
+                break;
             case DeadlinePanic:
                 this.time = quest.getDeadlineAt();
-                this.actionLink = getLink("complete");
-                this.actionName = "Complete";
+                this.actionLink = getLink("lock");
+                this.actionName = "Lock";
                 break;
             case OnCooldown:
                 this.time = quest.getCooldownTill();
