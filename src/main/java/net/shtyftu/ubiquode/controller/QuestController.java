@@ -42,7 +42,10 @@ public class QuestController extends AController {
                 .map(e -> {
                     final QuestPack pack = e.getKey();
                     return e.getValue().stream()
-                            .map(q -> new QuestView(userId, q, pack))
+                            .map(q -> {
+                                boolean canBeLocked = questService.canBeLocked(userId, pack.getId(), q.getState());
+                                return new QuestView(userId, q, pack, canBeLocked);
+                            })
                             .collect(Collectors.toList());
                 })
                 .flatMap(Collection::stream)
