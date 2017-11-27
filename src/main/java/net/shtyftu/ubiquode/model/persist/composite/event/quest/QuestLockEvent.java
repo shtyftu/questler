@@ -17,8 +17,7 @@ public class QuestLockEvent extends QuestEvent {
 
     @Override
     public void applyTo(Quest quest) {
-        final long now = System.currentTimeMillis();
-        quest.setLockedTill(now + ConfigService.QUEST_LOCK_TIME);
+        quest.setLockedTill(getTime() + ConfigService.QUEST_LOCK_TIME);
         quest.setUserId(userId);
     }
 
