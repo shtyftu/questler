@@ -8,17 +8,24 @@
         <div class="container">
             <div class="row">
                 <div class="col">Name</div>
-                <div class="col">Quest Count</div>
                 <div class="col"></div>
             </div>
             <c:forEach var="pack" items="${list}">
                 <div class="row">
                     <div class="col">${pack.name}</div>
-                    <div class="col">${pack.questCount}</div>
                     <div class="col"><a href="/pack/edit?packId=${pack.id}">
                         <button>Edit</button>
                     </a></div>
                 </div>
+                <br>
+                <c:forEach var="entry" items="${pack.protoIdsByQuestName}">
+                    <div class="row">
+                        <div class="col"></div>
+                        <div class="col">
+                            <a href="/pack/edit-quest?id=${entry.value}">${entry.key}</a>
+                        </div>
+                    </div>
+                </c:forEach>
             </c:forEach>
             <form action="/pack/create" method="post">
                 <div class="row">

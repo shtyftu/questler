@@ -19,7 +19,7 @@ public class QuestPackView {
     private List<String> inviteIds;
 
     @SuppressWarnings("unused")
-    public QuestPackView() {
+    private QuestPackView() {
     }
 
     public QuestPackView(QuestPack pack, Map<String, String> questNamesById, Map<String, String> userNamesById ) {

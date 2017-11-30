@@ -1,5 +1,6 @@
 package net.shtyftu.ubiquode.model.view;
 
+import java.util.Map;
 import net.shtyftu.ubiquode.model.QuestPack;
 
 /**
@@ -9,16 +10,19 @@ public class QuestPackLightView {
 
     private final String id;
     private final String name;
-    private final int questCount;
+    private final Map<String, String> protoIdsByQuestName;
 
-    public QuestPackLightView(QuestPack questPack) {
-        this(questPack.getId(), questPack.getName(), questPack.getProtoIdsByQuestId().entrySet().size());
+    public QuestPackLightView(QuestPack questPack, Map<String, String> protoIdsByQuestName) {
+        this(
+                questPack.getId(),
+                questPack.getName(),
+                protoIdsByQuestName);
     }
 
-    private QuestPackLightView(String id, String name, int questCount) {
+    private QuestPackLightView(String id, String name, Map<String, String> protoIdsByQuestName) {
         this.id = id;
         this.name = name;
-        this.questCount = questCount;
+        this.protoIdsByQuestName = protoIdsByQuestName;
     }
 
     public String getId() {
@@ -29,7 +33,7 @@ public class QuestPackLightView {
         return name;
     }
 
-    public int getQuestCount() {
-        return questCount;
+    public Map<String, String> getProtoIdsByQuestName() {
+        return protoIdsByQuestName;
     }
 }

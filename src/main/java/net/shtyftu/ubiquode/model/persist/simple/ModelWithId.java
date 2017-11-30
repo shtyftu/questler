@@ -7,7 +7,10 @@ import net.shtyftu.ubiquode.model.AModel;
  */
 public abstract class ModelWithId extends AModel {
 
-    private final String id;
+    private String id;
+
+    ModelWithId() {
+    }
 
     protected ModelWithId(String id) {
         this.id = id;
@@ -17,4 +20,7 @@ public abstract class ModelWithId extends AModel {
         return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
 }

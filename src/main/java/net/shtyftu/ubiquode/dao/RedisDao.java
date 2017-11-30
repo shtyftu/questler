@@ -4,14 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lambdaworks.redis.RedisClient;
 import com.lambdaworks.redis.api.sync.RedisCommands;
-import com.lambdaworks.redis.api.sync.RedisStringCommands;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -23,6 +20,7 @@ import org.slf4j.LoggerFactory;
 public abstract class RedisDao<E> {
 
     private static final int CONNECTION_MAX_COUNT = 50;
+//    private static final String REDIS_HOST = "redis://192.168.0.103";
     private static final String REDIS_HOST = "redis://localhost";
     private static final Gson GSON = new Gson();
 

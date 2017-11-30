@@ -14,6 +14,7 @@ import net.shtyftu.ubiquode.dao.plain.AccountDao;
 import net.shtyftu.ubiquode.dao.plain.QuestProtoDao;
 import net.shtyftu.ubiquode.model.QuestPack;
 import net.shtyftu.ubiquode.model.persist.simple.Account;
+import net.shtyftu.ubiquode.model.persist.simple.ModelWithId;
 import net.shtyftu.ubiquode.model.persist.simple.QuestProto;
 import net.shtyftu.ubiquode.model.projection.Quest;
 import net.shtyftu.ubiquode.model.projection.User;
@@ -70,7 +71,12 @@ public class QuestPackController extends AController {
         final List<String> questPackIds = user.getQuestPackIds();
         final List<QuestPackLightView> view = questPackIds.stream()
                 .map(questPackProcessor::getById)
-                .map(QuestPackLightView::new)
+                .map((questPack) -> new QuestPackLightView(
+                        questPack,
+                        questPack.getProtoIdsByQuestId().values().stream()
+                                .map(questProtoDao::getById)
+                                .collect(Collectors.toMap(QuestProto::getName, ModelWithId::getId))
+                ))
                 .collect(Collectors.toList());
         return ImmutableMap.of("list", view);
     }
@@ -143,6 +149,21 @@ public class QuestPackController extends AController {
         } else {
             return getDefaulView(ImmutableMap.of("messages", ImmutableList.of("pack [" + packId + "] created")));
         }
+    }
+
+    //TODO move onto the proto controller
+    @RequestMapping(value = "/edit-quest", method = RequestMethod.GET)
+    public Map<String, Object> editQuest(@RequestParam("id") String protoId) {
+        final QuestProto questProto = questProtoDao.getById(protoId);
+        return ImmutableMap.of("questProto", questProto);
+    }
+
+    //TODO move onto the proto controller
+    @RequestMapping(value = "/save-quest", method = RequestMethod.POST)
+    public ModelAndView save(@ModelAttribute("questProto") QuestProto questProto) {
+        return getDefaulView(ImmutableMap.of(
+                "messages",
+                ImmutableList.of("QuestProto [" + questProto.getId() + "] created")));
     }
 
 //    @RequestMapping(value = "/user/add", method = RequestMethod.POST)
