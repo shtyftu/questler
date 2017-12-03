@@ -24,6 +24,7 @@ import net.shtyftu.ubiquode.processor.QuestPackProcessor;
 import net.shtyftu.ubiquode.processor.QuestProcessor;
 import net.shtyftu.ubiquode.processor.UserProcessor;
 import net.shtyftu.ubiquode.service.QuestPackService;
+import net.shtyftu.ubiquode.service.QuestProtoService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -44,17 +45,19 @@ public class QuestPackController extends AController {
     private final UserProcessor userProcessor;
     private final QuestPackProcessor questPackProcessor;
     private final QuestProcessor questProcessor;
+    private final QuestProtoService questProtoService;
     private final QuestPackService questPackService;
     private final AccountDao accountDao;
 
     @Autowired
     public QuestPackController(QuestProtoDao questProtoDao, UserProcessor userProcessor,
-            QuestPackProcessor questPackProcessor, QuestProcessor questProcessor, QuestPackService questPackService,
-            AccountDao accountDao) {
+            QuestPackProcessor questPackProcessor, QuestProcessor questProcessor,
+           QuestProtoService questProtoService, QuestPackService questPackService, AccountDao accountDao) {
         this.questProtoDao = questProtoDao;
         this.userProcessor = userProcessor;
         this.questPackProcessor = questPackProcessor;
         this.questProcessor = questProcessor;
+        this.questProtoService = questProtoService;
         this.questPackService = questPackService;
         this.accountDao = accountDao;
     }
@@ -161,6 +164,8 @@ public class QuestPackController extends AController {
     //TODO move onto the proto controller
     @RequestMapping(value = "/save-quest", method = RequestMethod.POST)
     public ModelAndView save(@ModelAttribute("questProto") QuestProto questProto) {
+        questProtoService.validate(questProto);
+        questProtoDao.save(questProto);
         return getDefaulView(ImmutableMap.of(
                 "messages",
                 ImmutableList.of("QuestProto [" + questProto.getId() + "] created")));
