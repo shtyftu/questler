@@ -9,6 +9,13 @@
             <div class="row">
                 <div class="col">Name</div>
                 <div class="col"></div>
+                <form action="/pack/create" method="post">
+                    <div class="row">
+                        <div class="col">Create new Quest Pack:</div>
+                        <div class="col"><input type="text" placeholder="Name" name="name" required="required"/></div>
+                        <div class="col"><input type="submit" value="Create"/></div>
+                    </div>
+                </form>
             </div>
             <c:forEach var="pack" items="${list}">
                 <div class="row">
@@ -26,14 +33,14 @@
                         </div>
                     </div>
                 </c:forEach>
-            </c:forEach>
-            <form action="/pack/create" method="post">
                 <div class="row">
-                    <div class="col">Create new Quest Pack:</div>
-                    <div class="col"><input type="text" placeholder="Name" name="name" required="required"/></div>
-                    <div class="col"><input type="submit" value="Create"/></div>
+                    <div class="col"></div>
+                    <div class="col">
+                        <a href="/pack/edit-quest?id=&packId=${pack.id}">CREATE NEW QUEST</a>
+                    </div>
                 </div>
-            </form>
+            </c:forEach>
+
         </div>
     </jsp:body>
 </t:page>

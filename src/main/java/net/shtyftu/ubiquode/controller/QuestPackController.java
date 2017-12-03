@@ -4,11 +4,8 @@ import static net.shtyftu.ubiquode.controller.AController.PACK_CONTROLLER_PATH;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+
+import java.util.*;
 import java.util.stream.Collectors;
 import net.shtyftu.ubiquode.dao.plain.AccountDao;
 import net.shtyftu.ubiquode.dao.plain.QuestProtoDao;
@@ -33,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.apache.commons.lang3.ObjectUtils;
 
 /**
  * @author shtyftu
@@ -156,16 +154,24 @@ public class QuestPackController extends AController {
 
     //TODO move onto the proto controller
     @RequestMapping(value = "/edit-quest", method = RequestMethod.GET)
-    public Map<String, Object> editQuest(@RequestParam("id") String protoId) {
-        final QuestProto questProto = questProtoDao.getById(protoId);
-        return ImmutableMap.of("questProto", questProto);
+    public Map<String, Object> editQuest(@RequestParam("id") String protoId, @RequestParam("packId") String packId) {
+        final QuestProtoView questProto = ObjectUtils.defaultIfNull(questProtoDao.getById(protoId), new QuestProtoView());
+        return ImmutableMap.of("questProto", questProto, "packId", packId);
     }
 
     //TODO move onto the proto controller
     @RequestMapping(value = "/save-quest", method = RequestMethod.POST)
-    public ModelAndView save(@ModelAttribute("questProto") QuestProto questProto) {
+    public ModelAndView save(
+            @ModelAttribute("questProto") QuestProtoView questProto) {
+        final boolean newQuest = questProto.getId() == null;
+        if (newQuest) {
+            questProto.setId(UUID.randomUUID().toString());
+        }
         questProtoService.validate(questProto);
         questProtoDao.save(questProto);
+        if (newQuest) {
+            questPackService.addQuest(questProto.getId(), packId, getUserId());
+        }
         return getDefaulView(ImmutableMap.of(
                 "messages",
                 ImmutableList.of("QuestProto [" + questProto.getId() + "] created")));

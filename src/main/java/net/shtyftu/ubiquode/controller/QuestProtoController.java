@@ -16,8 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import net.shtyftu.ubiquode.dao.plain.QuestProtoDao;
 import net.shtyftu.ubiquode.model.dump.QuestProtoDump;
 import net.shtyftu.ubiquode.model.persist.simple.QuestProto;
-import net.shtyftu.ubiquode.model.view.QuestProtoView;
-import net.shtyftu.ubiquode.model.view.QuestProtoView.UpdateStatus;
+import net.shtyftu.ubiquode.model.view.QuestProtoLegacyView;
+import net.shtyftu.ubiquode.model.view.QuestProtoLegacyView.UpdateStatus;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -45,8 +45,8 @@ public class QuestProtoController {
 
     @RequestMapping(value = LIST_PATH, method = RequestMethod.GET)
     public Map<String, Object> getList() {
-        final List<QuestProtoView> list = questProtoDao.getAll().stream()
-                .map(QuestProtoView::new)
+        final List<QuestProtoLegacyView> list = questProtoDao.getAll().stream()
+                .map(QuestProtoLegacyView::new)
                 .collect(Collectors.toList());
         return ImmutableMap.of("list", list);
     }
@@ -82,14 +82,14 @@ public class QuestProtoController {
 
             final Set<String> oldProtoIds = questProtoDao.getAllIds();
             questProtoDao.save(questProtoList);
-            final List<QuestProtoView> listView = questProtoDao.getAll().stream()
+            final List<QuestProtoLegacyView> listView = questProtoDao.getAll().stream()
                     .map(q -> {
                         UpdateStatus status = !importedProtoIds.contains(q.getId())
                                 ? UpdateStatus.Old
                                 : oldProtoIds.contains(q.getId())
                                         ? UpdateStatus.Updated
                                         : UpdateStatus.Created;
-                        return new QuestProtoView(q, status);
+                        return new QuestProtoLegacyView(q, status);
                     }).collect(Collectors.toList());
             return new ModelAndView(
                     PROTO_CONTROLLER_PATH + LIST_PATH,
