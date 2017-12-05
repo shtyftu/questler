@@ -9,15 +9,17 @@
             <div class="row">
                 <div class="col">Name</div>
                 <div class="col"></div>
-                <form action="/pack/create" method="post">
-                    <div class="row">
-                        <div class="col">Create new Quest Pack:</div>
-                        <div class="col"><input type="text" placeholder="Name" name="name" required="required"/></div>
-                        <div class="col"><input type="submit" value="Create"/></div>
-                    </div>
-                </form>
             </div>
-            <c:forEach var="pack" items="${list}">
+            <form action="/pack/create" method="post">
+                <div class="row">
+                    <div class="col"><input type="text" placeholder="Name" name="name" required="required"/></div>
+                    <div class="col"><input type="submit" value="Create new Quest Pack"/></div>
+                </div>
+            </form>
+        </div>
+        <c:forEach var="pack" items="${list}">
+            <br>
+            <div class="container">
                 <div class="row">
                     <div class="col">${pack.name}</div>
                     <div class="col"><a href="/pack/edit?packId=${pack.id}">
@@ -27,20 +29,18 @@
                 <br>
                 <c:forEach var="entry" items="${pack.protoIdsByQuestName}">
                     <div class="row">
-                        <div class="col"></div>
                         <div class="col">
-                            <a href="/pack/edit-quest?id=${entry.value}">${entry.key}</a>
+                            <a href="/pack/edit-quest?id=${entry.value}&packId=${pack.id}">${entry.key}</a>
                         </div>
                     </div>
                 </c:forEach>
                 <div class="row">
-                    <div class="col"></div>
                     <div class="col">
                         <a href="/pack/edit-quest?id=&packId=${pack.id}">CREATE NEW QUEST</a>
                     </div>
                 </div>
-            </c:forEach>
-
+            </div>
+        </c:forEach>
         </div>
     </jsp:body>
 </t:page>

@@ -7,6 +7,7 @@
     <jsp:body>
         <form:form method="POST" action="/pack/save-quest" modelAttribute="questProto">
             <form:hidden path="id"/>
+            <input type="hidden" name="packId" value="${packId}"/>
             <h3>Editing the quest ${questProto.name} #${questProto.id}</h3>
             <div class="container">
                 <div class="row">

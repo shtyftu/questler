@@ -5,7 +5,12 @@ import static net.shtyftu.ubiquode.controller.AController.PACK_CONTROLLER_PATH;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import net.shtyftu.ubiquode.dao.plain.AccountDao;
 import net.shtyftu.ubiquode.dao.plain.QuestProtoDao;
@@ -17,12 +22,15 @@ import net.shtyftu.ubiquode.model.projection.Quest;
 import net.shtyftu.ubiquode.model.projection.User;
 import net.shtyftu.ubiquode.model.view.QuestPackLightView;
 import net.shtyftu.ubiquode.model.view.QuestPackView;
+import net.shtyftu.ubiquode.model.view.QuestProtoView;
 import net.shtyftu.ubiquode.processor.QuestPackProcessor;
 import net.shtyftu.ubiquode.processor.QuestProcessor;
 import net.shtyftu.ubiquode.processor.UserProcessor;
 import net.shtyftu.ubiquode.service.QuestPackService;
 import net.shtyftu.ubiquode.service.QuestProtoService;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -30,7 +38,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import org.apache.commons.lang3.ObjectUtils;
 
 /**
  * @author shtyftu
@@ -155,21 +162,21 @@ public class QuestPackController extends AController {
     //TODO move onto the proto controller
     @RequestMapping(value = "/edit-quest", method = RequestMethod.GET)
     public Map<String, Object> editQuest(@RequestParam("id") String protoId, @RequestParam("packId") String packId) {
-        final QuestProtoView questProto = ObjectUtils.defaultIfNull(questProtoDao.getById(protoId), new QuestProtoView());
+        final QuestProto questProto = ObjectUtils.defaultIfNull(questProtoDao.getById(protoId), new QuestProto());
         return ImmutableMap.of("questProto", questProto, "packId", packId);
     }
 
     //TODO move onto the proto controller
     @RequestMapping(value = "/save-quest", method = RequestMethod.POST)
-    public ModelAndView save(
-            @ModelAttribute("questProto") QuestProtoView questProto) {
-        final boolean newQuest = questProto.getId() == null;
+    public ModelAndView save(@ModelAttribute("questProto") QuestProtoView questProto) {
+        final boolean newQuest = StringUtils.isBlank(questProto.getId());
         if (newQuest) {
             questProto.setId(UUID.randomUUID().toString());
         }
         questProtoService.validate(questProto);
         questProtoDao.save(questProto);
         if (newQuest) {
+            final String packId = questProto.getPackId();
             questPackService.addQuest(questProto.getId(), packId, getUserId());
         }
         return getDefaulView(ImmutableMap.of(

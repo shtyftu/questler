@@ -8,6 +8,9 @@ import org.springframework.stereotype.Component;
 public class QuestProtoService {
 
     public void validate(QuestProto proto) {
+        if (StringUtils.isBlank(proto.getId())) {
+            throw new IllegalArgumentException("id (required field) is empty");
+        }
         final Long cooldown = proto.getCooldown();
         if (cooldown == null || cooldown <= 0) {
             throw new IllegalArgumentException("cooldown must be positive: [" + cooldown + "]");

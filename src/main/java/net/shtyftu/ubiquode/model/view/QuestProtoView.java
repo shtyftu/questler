@@ -6,5 +6,11 @@ public class QuestProtoView extends QuestProto {
 
     private String packId;
 
+    public String getPackId() {
+        return packId;
+    }
 
+    public void setPackId(String packId) {
+        this.packId = packId;
+    }
 }

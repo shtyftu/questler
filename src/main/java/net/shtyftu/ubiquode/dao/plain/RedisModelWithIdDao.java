@@ -1,14 +1,14 @@
 package net.shtyftu.ubiquode.dao.plain;
 
 import com.google.gson.reflect.TypeToken;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.annotation.Nonnull;
 import net.shtyftu.ubiquode.dao.RedisDao;
 import net.shtyftu.ubiquode.model.persist.simple.ModelWithId;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author shtyftu
@@ -29,6 +29,9 @@ public class RedisModelWithIdDao<E extends ModelWithId> extends RedisDao<E> impl
 
     @Override
     public E getById(String id) {
+        if (StringUtils.isBlank(id)) {
+            return null;
+        }
         final String model = redisCmd().get(getModelKey(id));
         return deserialize(model);
     }
@@ -46,7 +49,7 @@ public class RedisModelWithIdDao<E extends ModelWithId> extends RedisDao<E> impl
     }
 
     @Override
-    public void save(E entity) {
+    public void save(@Nonnull E entity) {
         final String id = entity.getId();
         redisCmd().set(getModelKey(id), serialize(entity));
         redisCmd().sadd(getKeysKey(), id);
