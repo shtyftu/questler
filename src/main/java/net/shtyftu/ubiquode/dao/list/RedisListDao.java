@@ -3,7 +3,7 @@ package net.shtyftu.ubiquode.dao.list;
 import com.google.gson.reflect.TypeToken;
 import com.lambdaworks.redis.api.sync.RedisCommands;
 import com.lambdaworks.redis.output.ValueStreamingChannel;
-import java.lang.reflect.Type;
+import net.shtyftu.ubiquode.dao.RedisClientService;
 import net.shtyftu.ubiquode.dao.RedisDao;
 import net.shtyftu.ubiquode.model.persist.simple.ModelWithId;
 
@@ -12,8 +12,8 @@ import net.shtyftu.ubiquode.model.persist.simple.ModelWithId;
  */
 public abstract class RedisListDao<E extends ModelWithId> extends RedisDao<E> implements ListDao<E> {
 
-    public RedisListDao(TypeToken<E> typeToken) {
-        super(typeToken);
+    public RedisListDao(TypeToken<E> typeToken, RedisClientService clientService) {
+        super(typeToken, clientService);
     }
 
     @Override

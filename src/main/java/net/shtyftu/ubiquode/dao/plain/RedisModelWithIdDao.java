@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
+import net.shtyftu.ubiquode.dao.RedisClientService;
 import net.shtyftu.ubiquode.dao.RedisDao;
 import net.shtyftu.ubiquode.model.persist.simple.ModelWithId;
 import org.apache.commons.lang3.StringUtils;
@@ -15,8 +16,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class RedisModelWithIdDao<E extends ModelWithId> extends RedisDao<E> implements Dao<E> {
 
-    public RedisModelWithIdDao(TypeToken<E> typeToken) {
-        super(typeToken);
+    public RedisModelWithIdDao(TypeToken<E> typeToken, RedisClientService clientService) {
+        super(typeToken, clientService);
     }
 
     private String getKeysKey() {
