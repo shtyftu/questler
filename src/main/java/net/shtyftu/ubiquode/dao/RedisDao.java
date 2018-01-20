@@ -3,7 +3,6 @@ package net.shtyftu.ubiquode.dao;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lambdaworks.redis.api.sync.RedisCommands;
-import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
@@ -15,7 +14,6 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class RedisDao<E> {
 
-    protected final Type type;
     protected final String redisTypeName;
 
     private static final Gson GSON = new Gson();
@@ -23,10 +21,9 @@ public abstract class RedisDao<E> {
     private final RedisClientService clientService;
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
+    //todo change type token to class
     public RedisDao(TypeToken<E> typeToken, RedisClientService clientService) {
-        this.type = typeToken.getType();
-
-        final String typeString = type.toString();
+        final String typeString = typeToken.getType().toString();
         final String className = (typeString.substring(typeString.lastIndexOf(".") + 1));
         redisTypeName = Arrays.stream(className.split("(?=\\p{Upper})"))
                 .map(String::toLowerCase)
@@ -44,6 +41,7 @@ public abstract class RedisDao<E> {
         return GSON.toJson(entity);
     }
 
+    @SuppressWarnings("unchecked")
     protected E deserialize(String string) {
         if (StringUtils.isNotBlank(string)) {
             try {
