@@ -10,11 +10,9 @@ import net.shtyftu.ubiquode.model.AModel;
 public class User extends AModel {
 
     private String name;
-//    private Long scores;
     private String lockedQuestId;
     private Long mustCompleteQuestTill;
     private Long unableToLockQuestTill;
-    private int score;
     private List<String> questPackIds;
 
     public User(String name) {
@@ -23,7 +21,8 @@ public class User extends AModel {
     }
 
     public boolean isCanLockQuest() {
-        return unableToLockQuestTill == null || System.currentTimeMillis() > unableToLockQuestTill;
+        return lockedQuestId == null
+                && (unableToLockQuestTill == null || System.currentTimeMillis() > unableToLockQuestTill);
     }
 
     public String getLockedQuestId() {
@@ -47,23 +46,8 @@ public class User extends AModel {
                 && mustCompleteQuestTill != null && now() < mustCompleteQuestTill;
     }
 
-//    public int getScore() {
-//        return score;
-//    }
-
-//    public void setScore(int score) {
-//        this.score = score;
-//    }
-
-    public boolean isNeedToDealWithDeadline() {
-        return true;
-    }
-
     public List<String> getQuestPackIds() {
         return questPackIds;
     }
 
-    public void setQuestPackIds(List<String> questPackIds) {
-        this.questPackIds = questPackIds;
-    }
 }
