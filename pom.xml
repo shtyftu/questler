@@ -6,8 +6,17 @@
   <groupId>net.shtyftu</groupId>
   <artifactId>questler</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <!--<packaging>jar</packaging>-->
+  <packaging>war</packaging>
+
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/webapp</directory>
+      </resource>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -24,28 +33,6 @@
           <addResources>true</addResources>
         </configuration>
       </plugin>
-      <!--<plugin>-->
-        <!--<artifactId>maven-resources-plugin</artifactId>-->
-        <!--<version>2.6</version>-->
-        <!--<executions>-->
-          <!--<execution>-->
-            <!--<id>copy-resources</id>-->
-            <!--<phase>validate</phase>-->
-            <!--<goals>-->
-              <!--<goal>copy-resources</goal>-->
-            <!--</goals>-->
-            <!--<configuration>-->
-              <!--<outputDirectory>${basedir}/target/classes/static</outputDirectory>-->
-              <!--<resources>-->
-                <!--<resource>-->
-                  <!--<directory>src/main/webapp</directory>-->
-                  <!--<filtering>true</filtering>-->
-                <!--</resource>-->
-              <!--</resources>-->
-            <!--</configuration>-->
-          <!--</execution>-->
-        <!--</executions>-->
-      <!--</plugin>-->
     </plugins>
   </build>
 
