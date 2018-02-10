@@ -9,3 +9,4 @@ if [ $? -eq 1 ]; then
     echo Unable to restart app
     exit 1
 fi
+echo App is starting
