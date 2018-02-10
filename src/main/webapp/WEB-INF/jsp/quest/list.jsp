@@ -32,8 +32,12 @@
                     <li class="list-group-item">
                         <label class="control-label"><h3>Scoreboards:</h3></label>
                         <c:forEach var="scores" items="${scoresList}">
-                            <b>${scores.packName}</b>
                             <table class="table table-striped table-bordered">
+                                <tr>
+                                    <td>
+                                        <b>${scores.packName}</b>
+                                    </td>
+                                </tr>
                                 <c:forEach var="scoreLine" items="${scores.scores}">
                                     <tr>
                                         <td>${scoreLine.key}</td>
