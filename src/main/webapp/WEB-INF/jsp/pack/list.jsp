@@ -4,43 +4,40 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <t:page>
     <jsp:body>
-        <h3>Quest Proto list:</h3>
-        <div class="container">
-            <div class="row">
-                <div class="col">Name</div>
-                <div class="col"></div>
-            </div>
+        <table>
             <form action="/pack/create" method="post">
-                <div class="row">
-                    <div class="col"><input type="text" placeholder="Name" name="name" required="required"/></div>
-                    <div class="col"><input type="submit" value="Create new Quest Pack"/></div>
-                </div>
+                <tr>
+                    <td><input type="text" placeholder="Name" name="name" required="required"/></td>
+                    <td><input type="submit" class="btn btn-success" value="Create new Quest Pack"/></td>
+                </tr>
             </form>
-        </div>
+        </table>
+
+        <h3>Quest Proto list:</h3>
         <c:forEach var="pack" items="${list}">
-            <br>
-            <div class="container">
-                <div class="row">
-                    <div class="col">${pack.name}</div>
-                    <div class="col"><a href="/pack/edit?packId=${pack.id}">
-                        <button>Edit</button>
-                    </a></div>
-                </div>
-                <br>
+            <a href="/pack/edit?packId=${pack.id}">
+                <label class="control-label">${pack.name}</label>
+            </a>
+            <table class="table table-striped table-bordered">
                 <c:forEach var="entry" items="${pack.protoIdsByQuestName}">
-                    <div class="row">
-                        <div class="col">
-                            <a href="/pack/edit-quest?id=${entry.value}&packId=${pack.id}">${entry.key}</a>
-                        </div>
-                    </div>
+                    <tr>
+                        <td>${entry.key}</td>
+                        <td>
+                            <a href="/pack/edit-quest?id=${entry.value}&packId=${pack.id}">
+                                <button class="btn btn-success">Edit</button>
+                            </a>
+                        </td>
+                    </tr>
                 </c:forEach>
-                <div class="row">
-                    <div class="col">
-                        <a href="/pack/edit-quest?id=&packId=${pack.id}">CREATE NEW QUEST</a>
-                    </div>
-                </div>
-            </div>
+                <tr>
+                    <td/>
+                    <td>
+                        <a href="/pack/edit-quest?id=&packId=${pack.id}">
+                            <button class="btn btn-info">New quest</button>
+                        </a>
+                    </td>
+                </tr>
+            </table>
         </c:forEach>
-        </div>
     </jsp:body>
 </t:page>

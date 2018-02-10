@@ -5,38 +5,39 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <t:page>
     <jsp:body>
-        <h3>Your quests:</h3>
-        <div class="container">
+        <label class="control-label"><h3>Your quests:</h3></label>
+        <table class="table table-striped table-bordered">
             <c:forEach var="quest" items="${questList}">
-                <div class="row">
-                    <div class="col">${quest.name}</div>
-                    <div class="col">${quest.scores}</div>
-                    <div class="col">${quest.state}</div>
-                    <div class="col timer" data-time="${quest.time}"></div>
-                    <div class="col">
-                        <c:if test="${not empty quest.actionLink}">
-                            <form:form method="POST" action="${quest.actionLink}">
-                                <input type="submit" class="btn btn-default" value="${quest.actionName}"/>
-                            </form:form>
-                        </c:if>
-                    </div>
-                </div>
+                <tr>
+                    <form:form method="POST" action="${quest.actionLink}">
+                        <td>${quest.name}</td>
+                        <td><span class="badge">${quest.scores}</span></td>
+                        <td>${quest.state}</td>
+                        <td class="timer" data-time="${quest.time}"></td>
+                        <td>
+                            <c:if test="${not empty quest.actionLink}">
+                                <input type="submit" class="btn btn-success" value="${quest.actionName}"/>
+                            </c:if>
+                        </td>
+                    </form:form>
+                </tr>
             </c:forEach>
-        </div>
+        </table>
         <br/>
-        <h3>Scoreboards:</h3>
-        <div class="container">
-            <c:forEach var="scores" items="${scoresList}">
-                <div class="row">${scores.packName}</div>
-                <c:forEach var="scoreLine" items="${scores.scores}">
-                    <div class="row">
-                        <div class="col">${scoreLine.key}</div>
-                        <div class="col">${scoreLine.value}</div>
-                    </div>
-                </c:forEach>
-                <br>
+        <label class="control-label"><h3>Scoreboards:</h3></label>
+        <c:forEach var="scores" items="${scoresList}">
+            <br>
+            <b>${scores.packName}</b>
+            <table class="table table-striped table-bordered">
+            <c:forEach var="scoreLine" items="${scores.scores}">
+                <tr>
+                    <td>${scoreLine.key}</td>
+                    <td>${scoreLine.value}</td>
+                </tr>
             </c:forEach>
-        </div>
+            </table>
+        </c:forEach>
+
         <script>
           var currentTime = (new Date).getTime(),
               $timers = $(".timer");
