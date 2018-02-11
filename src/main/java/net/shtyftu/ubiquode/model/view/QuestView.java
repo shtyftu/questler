@@ -68,7 +68,7 @@ public class QuestView implements Comparable<QuestView> {
                 this.time = quest.getLockedTill();
                 if (quest.getUserId().equals(userId)) {
                     this.actionLink = getLink("complete");
-                    this.actionName = "Complete";
+                    this.actionName = "Done";
                 } else {
                     this.actionLink = "";
                     this.actionName = "";
