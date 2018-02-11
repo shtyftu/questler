@@ -6,66 +6,62 @@
 <t:page>
     <jsp:body>
         <div class="container main-container">
-            <div class="col-sm-14">
-                <ul class="list-group">
-                    <li class="list-group-item">
-                        <label class="control-label"><h3>Your quests:</h3></label>
-                        <table class="table table-striped table-bordered">
-                            <c:forEach var="quest" items="${questList}">
-                                <tr>
-                                    <form:form method="POST" action="${quest.actionLink}">
-                                        <td>${quest.name}</td>
-                                        <td><span class="badge">${quest.scores}</span></td>
-                                        <td>${quest.state}</td>
-                                        <td class="timer" data-time="${quest.time}"></td>
-                                        <td>
-                                            <c:if test="${not empty quest.actionLink}">
-                                                <input type="submit" class="btn btn-success"
-                                                       value="${quest.actionName}"/>
-                                            </c:if>
-                                        </td>
-                                    </form:form>
-                                </tr>
-                            </c:forEach>
-                        </table>
-                    </li>
-                    <li class="list-group-item">
-                        <label class="control-label"><h3>Scoreboards:</h3></label>
-                        <c:forEach var="scores" items="${scoresList}">
-                            <table class="table table-striped table-bordered">
-                                <tr>
-                                    <td>
-                                        <b>${scores.packName}</b>
-                                    </td>
-                                </tr>
-                                <c:forEach var="scoreLine" items="${scores.scores}">
-                                    <tr>
-                                        <td>${scoreLine.key}</td>
-                                        <td>${scoreLine.value}</td>
-                                    </tr>
-                                </c:forEach>
-                            </table>
+            <div class="table-responsive">
+                <label class="control-label"><h3>Your quests:</h3></label>
+                <table class="table table-striped table-bordered">
+                    <c:forEach var="quest" items="${questList}">
+                        <tr>
+                            <form:form method="POST" action="${quest.actionLink}">
+                                <td>${quest.name}</td>
+                                <td><span class="badge">${quest.scores}</span></td>
+                                <td>${quest.state}</td>
+                                <td class="timer" data-time="${quest.time}"></td>
+                                <td>
+                                    <c:if test="${not empty quest.actionLink}">
+                                        <input type="submit" class="btn btn-success"
+                                               value="${quest.actionName}"/>
+                                    </c:if>
+                                </td>
+                            </form:form>
+                        </tr>
+                    </c:forEach>
+                </table>
+            </div>
+            <div class="table-responsive">
+                <label class="control-label"><h3>Scoreboards:</h3></label>
+                <c:forEach var="scores" items="${scoresList}">
+                    <table class="table table-striped table-bordered">
+                        <tr>
+                            <td>
+                                <b>${scores.packName}</b>
+                            </td>
+                        </tr>
+                        <c:forEach var="scoreLine" items="${scores.scores}">
+                            <tr>
+                                <td>${scoreLine.key}</td>
+                                <td>${scoreLine.value}</td>
+                            </tr>
                         </c:forEach>
-                    </li>
-                </ul>
+                    </table>
+                </c:forEach>
             </div>
         </div>
 
 
         <script>
-          var currentTime = (new Date).getTime(),
-              $timers = $(".timer");
+            var currentTime = (new Date).getTime(),
+                $timers = $(".timer");
 
-          setInterval(function () {
-            currentTime += 1000;
-            $timers.each(function (index, obj) {
-              var $obj = $(obj);
-              var timeValue = $obj.attr("data-time");
-              if (timeValue) {
-                obj.innerHTML = millisToString(timeValue - currentTime);
-              }
-            });
-          }, 1000)
+            setInterval(function () {
+                currentTime += 1000;
+                $timers.each(function (index, obj) {
+                    var $obj = $(obj);
+                    var timeValue = $obj.attr("data-time");
+                    if (timeValue) {
+                        obj.innerHTML = millisToString(timeValue - currentTime);
+                    }
+                });
+            }, 1000)
         </script>
     </jsp:body>
 </t:page>

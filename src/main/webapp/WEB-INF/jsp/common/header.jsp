@@ -1,9 +1,11 @@
-<div class="container">
-    <div class="row">
-        <div class="col text-center"><a href="/quest/list"><h2>Home</h2></a></div>
-        <div class="col text-center"><a href="/pack/list"><h2>Packs</h2></a></div>
-        <div class="col text-center"><a href="/proto/list"><h2>Protos</h2></a></div>
-    </div>
+<div class="table-responsive">
+    <table>
+    <tr>
+        <td class="text-center"><a href="/quest/list"><h2>Home</h2></a></td>
+        <td class="text-center"><a href="/pack/list"><h2>Packs</h2></a></td>
+        <td class="text-center"><a href="/proto/list"><h2>Protos</h2></a></td>
+    </tr>
+    </table>
 </div>
 <script>
   function millisToString(millis) {
