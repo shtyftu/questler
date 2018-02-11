@@ -10,7 +10,9 @@
     <%@ include file="../jsp/common/header.jsp" %>
 </div>
 <div id="body">
-    <jsp:doBody/>
+    <div class="container main-container">
+        <jsp:doBody/>
+    </div>
 </div>
 <div id="pagefooter">
     <jsp:invoke fragment="footer"/>

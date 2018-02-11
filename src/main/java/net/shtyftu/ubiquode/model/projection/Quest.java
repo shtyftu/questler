@@ -127,22 +127,28 @@ public class Quest extends AModel {
     }
 
     public enum State {
-        LockedByUser(8),
-        DeadlinePanic(15),
-        Available(20),
-        Unavailable(25),
-        WaitingTrigger(25),
-        OnCooldown(30),
-        Disabled(34);
+        LockedByUser(8, "Locked"),
+        DeadlinePanic(15, "Deadline panic"),
+        Available(20, "Available"),
+        WaitingTrigger(23, "Waiting trigger"),
+        Unavailable(25, "Unavailable"),
+        OnCooldown(30, "On cooldown"),
+        Disabled(34, "Disabled");
 
         private final int order;
+        private final String prettyName;
 
-        State(int order) {
+        State(int order, String prettyName) {
             this.order = order;
+            this.prettyName = prettyName;
         }
 
         public int getOrder() {
             return order;
+        }
+
+        public String prettyName() {
+            return prettyName;
         }
     }
 

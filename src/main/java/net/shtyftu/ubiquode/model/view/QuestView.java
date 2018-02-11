@@ -30,7 +30,7 @@ public class QuestView implements Comparable<QuestView> {
         if (state == State.Available && !canBeLocked) {
             state = State.Unavailable;
         }
-        this.state = state.name();
+        this.state = state.prettyName();
         this.order = state.getOrder();
 
         switch (state) {

@@ -3,7 +3,6 @@
     <tr>
         <td class="text-center"><a href="/quest/list"><h2>Home</h2></a></td>
         <td class="text-center"><a href="/pack/list"><h2>Packs</h2></a></td>
-        <td class="text-center"><a href="/proto/list"><h2>Protos</h2></a></td>
     </tr>
     </table>
 </div>
@@ -12,7 +11,7 @@
     function addToResult(result, count, postfix) {
       if ((count || result) && resultSize <2) {
         if (result) {
-          result += ":";
+          result += " ";
         }
         result += count + postfix;
         resultSize++;

@@ -5,63 +5,65 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <t:page>
     <jsp:body>
-        <div class="container main-container">
-            <div class="table-responsive">
-                <label class="control-label"><h3>Your quests:</h3></label>
+        <div class="table-responsive">
+            <label class="control-label"><h3>Your quests:</h3></label>
+            <table class="table table-striped table-bordered">
+                <c:forEach var="quest" items="${questList}">
+                    <tr>
+                        <form:form method="POST" action="${quest.actionLink}">
+                            <td>${quest.name}</td>
+                            <td><span class="badge">${quest.scores}</span></td>
+                            <td>${quest.state}</td>
+                            <td class="timer" data-time="${quest.time}"></td>
+                            <td class="text-center">
+                                <c:if test="${not empty quest.actionLink}">
+                                    <input type="submit" class="btn btn-success"
+                                           value="${quest.actionName}"/>
+                                </c:if>
+                            </td>
+                        </form:form>
+                    </tr>
+                </c:forEach>
+            </table>
+        </div>
+        <div class="table-responsive">
+            <label class="control-label"><h3>Scoreboards:</h3></label>
+            <c:forEach var="scores" items="${scoresList}">
                 <table class="table table-striped table-bordered">
-                    <c:forEach var="quest" items="${questList}">
+                    <thead class="text-center">
+                    <tr>
+                        <td colspan="2" class="text-center">
+                            <b>${scores.packName}</b>
+                        </td>
+                    </tr>
+                    </thead>
+                    <c:forEach var="scoreLine" items="${scores.scores}">
                         <tr>
-                            <form:form method="POST" action="${quest.actionLink}">
-                                <td>${quest.name}</td>
-                                <td><span class="badge">${quest.scores}</span></td>
-                                <td>${quest.state}</td>
-                                <td class="timer" data-time="${quest.time}"></td>
-                                <td>
-                                    <c:if test="${not empty quest.actionLink}">
-                                        <input type="submit" class="btn btn-success"
-                                               value="${quest.actionName}"/>
-                                    </c:if>
-                                </td>
-                            </form:form>
+                            <td>${scoreLine.key}</td>
+                            <td>${scoreLine.value}</td>
                         </tr>
                     </c:forEach>
                 </table>
-            </div>
-            <div class="table-responsive">
-                <label class="control-label"><h3>Scoreboards:</h3></label>
-                <c:forEach var="scores" items="${scoresList}">
-                    <table class="table table-striped table-bordered">
-                        <tr>
-                            <td>
-                                <b>${scores.packName}</b>
-                            </td>
-                        </tr>
-                        <c:forEach var="scoreLine" items="${scores.scores}">
-                            <tr>
-                                <td>${scoreLine.key}</td>
-                                <td>${scoreLine.value}</td>
-                            </tr>
-                        </c:forEach>
-                    </table>
-                </c:forEach>
-            </div>
+            </c:forEach>
         </div>
 
 
         <script>
-            var currentTime = (new Date).getTime(),
-                $timers = $(".timer");
+          var currentTime = (new Date).getTime(),
+              $timers = $(".timer");
 
-            setInterval(function () {
-                currentTime += 1000;
-                $timers.each(function (index, obj) {
-                    var $obj = $(obj);
-                    var timeValue = $obj.attr("data-time");
-                    if (timeValue) {
-                        obj.innerHTML = millisToString(timeValue - currentTime);
-                    }
-                });
-            }, 1000)
+          var adjustTime = function () {
+            currentTime += 1000;
+            $timers.each(function (index, obj) {
+              var $obj = $(obj);
+              var timeValue = $obj.attr("data-time");
+              if (timeValue) {
+                obj.innerHTML = millisToString(timeValue - currentTime);
+              }
+            });
+          };
+          adjustTime()
+          setInterval(adjustTime, 1000)
         </script>
     </jsp:body>
 </t:page>
