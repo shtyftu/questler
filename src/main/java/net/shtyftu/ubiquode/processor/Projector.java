@@ -10,13 +10,13 @@ import javax.annotation.Nullable;
 /**
  * @author shtyftu
  */
-public abstract class Processor<T, E extends AEvent<T>> {
+public abstract class Projector<T, E extends AEvent<T>> {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private final EventDao<E> eventDao;
 
-    Processor(EventDao<E> eventDao) {
+    Projector(EventDao<E> eventDao) {
         this.eventDao = eventDao;
     }
 

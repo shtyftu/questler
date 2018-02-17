@@ -12,4 +12,5 @@ public abstract class QuestEvent extends AEvent<Quest> {
         super(questId);
     }
 
+    public abstract String getViewName();
 }

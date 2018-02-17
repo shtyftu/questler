@@ -18,7 +18,7 @@ public abstract class AEvent<T> extends ModelWithCompositeId<Long> implements Co
         return o == null ? 1 : Long.compare(getTime(), o.getTime());
     }
 
-    protected long getTime() {
+    public long getTime() {
         return getClusteringId();
     }
 }

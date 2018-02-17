@@ -8,9 +8,7 @@ import net.shtyftu.ubiquode.model.persist.composite.event.quest.QuestEvent;
 import net.shtyftu.ubiquode.model.persist.composite.event.quest.QuestLockEvent;
 import net.shtyftu.ubiquode.model.persist.composite.event.quest.QuestSetProtoIdEvent;
 import net.shtyftu.ubiquode.model.persist.composite.event.quest.QuestTriggerEvent;
-import net.shtyftu.ubiquode.model.persist.simple.QuestProto;
 import net.shtyftu.ubiquode.model.projection.Quest;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,12 +16,12 @@ import org.springframework.stereotype.Component;
  * @author shtyftu
  */
 @Component
-public class QuestProcessor extends Processor<Quest, QuestEvent> {
+public class QuestProjector extends Projector<Quest, QuestEvent> {
 
     private final QuestProtoDao protoDao;
 
     @Autowired
-    public QuestProcessor(QuestEventDao eventDao, QuestProtoDao protoDao) {
+    public QuestProjector(QuestEventDao eventDao, QuestProtoDao protoDao) {
         super(eventDao);
         this.protoDao = protoDao;
     }

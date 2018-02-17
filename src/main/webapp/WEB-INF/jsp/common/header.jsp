@@ -3,6 +3,7 @@
     <tr>
         <td class="text-center"><a href="/quest/list"><h2>Home</h2></a></td>
         <td class="text-center"><a href="/pack/list"><h2>Packs</h2></a></td>
+        <td class="text-center"><a href="/stats/list"><h2>Stats</h2></a></td>
     </tr>
     </table>
 </div>

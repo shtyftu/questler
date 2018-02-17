@@ -1,7 +1,9 @@
 package net.shtyftu.ubiquode.controller;
 
+import com.google.common.collect.ImmutableMap;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
@@ -15,8 +17,8 @@ import org.springframework.web.servlet.ModelAndView;
 public abstract class AController {
 
     public static final String QUEST_CONTROLLER_PATH = "/quest";
-    public static final String PROTO_CONTROLLER_PATH = "/proto";
     public static final String PACK_CONTROLLER_PATH = "/pack";
+    public static final String STATS_CONTROLLER_PATH = "/stats";
 
     public static final String LIST_PATH = "/list";
     public static final String EDIT_PATH = "/edit";
@@ -41,7 +43,19 @@ public abstract class AController {
 
     protected abstract Map<String, Object> getDefaultViewModel();
 
-    protected ModelAndView getDefaulView(Map<String, Object> viewModel) {
+    protected ModelAndView getMessageView(List<Object> messages) {
+        return getDefaultPathView(ImmutableMap.of("messages", messages));
+    }
+
+    protected ModelAndView getErrorView(List<Object> errors) {
+        return getDefaultPathView(getErrorsViewMap(errors));
+    }
+
+    protected Map<String, Object> getErrorsViewMap(List<Object> errors1) {
+        return ImmutableMap.of("errors", errors1);
+    }
+
+    private ModelAndView getDefaultPathView(Map<String, Object> viewModel) {
         final Map<String, Object> fullViewModel = new HashMap<>();
         fullViewModel.putAll(getDefaultViewModel());
         fullViewModel.putAll(viewModel);

@@ -16,12 +16,12 @@ import org.springframework.stereotype.Component;
  * @author shtyftu
  */
 @Component
-public class QuestPackProcessor extends Processor<QuestPack, QuestPackEvent> {
+public class QuestPackProjector extends Projector<QuestPack, QuestPackEvent> {
 
     private final QuestProtoDao questProtoDao;
 
     @Autowired
-    public QuestPackProcessor(QuestPackEventDao eventDao, QuestProtoDao questProtoDao) {
+    public QuestPackProjector(QuestPackEventDao eventDao, QuestProtoDao questProtoDao) {
         super(eventDao);
         this.questProtoDao = questProtoDao;
     }

@@ -1,8 +1,8 @@
 package net.shtyftu.ubiquode.service;
 
-import net.shtyftu.ubiquode.processor.QuestPackProcessor;
-import net.shtyftu.ubiquode.processor.QuestProcessor;
-import net.shtyftu.ubiquode.processor.UserProcessor;
+import net.shtyftu.ubiquode.processor.QuestPackProjector;
+import net.shtyftu.ubiquode.processor.QuestProjector;
+import net.shtyftu.ubiquode.processor.UserProjector;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,39 +13,39 @@ import org.springframework.stereotype.Service;
 @Service
 public class QuestPackService {
 
-    private final QuestPackProcessor questPackProcessor;
-    private final QuestProcessor questProcessor;
+    private final QuestPackProjector questPackProjector;
+    private final QuestProjector questProjector;
     private final QuestService questService;
-    private final UserProcessor userProcessor;
+    private final UserProjector userProjector;
 
     @Autowired
-    public QuestPackService(QuestPackProcessor questPackProcessor, QuestProcessor questProcessor,
-            QuestService questService, UserProcessor userProcessor) {
-        this.questPackProcessor = questPackProcessor;
-        this.questProcessor = questProcessor;
+    public QuestPackService(QuestPackProjector questPackProjector, QuestProjector questProjector,
+            QuestService questService, UserProjector userProjector) {
+        this.questPackProjector = questPackProjector;
+        this.questProjector = questProjector;
         this.questService = questService;
-        this.userProcessor = userProcessor;
+        this.userProjector = userProjector;
     }
 
     public String create(String name, String userId) {
-        final String packId = userProcessor.addNewQuestPack(userId);
-        questPackProcessor.setName(packId, name);
-        questPackProcessor.addUser(packId, userId, userId);
+        final String packId = userProjector.addNewQuestPack(userId);
+        questPackProjector.setName(packId, name);
+        questPackProjector.addUser(packId, userId, userId);
         return packId;
     }
 
     public boolean addQuest(String protoId, String packId, String userId) {
-        final String questId = questPackProcessor.addQuest(packId, protoId, userId);
+        final String questId = questPackProjector.addQuest(packId, protoId, userId);
         if (StringUtils.isBlank(questId)) {
             return false;
         }
-        questProcessor.setProtoId(questId, protoId);
+        questProjector.setProtoId(questId, protoId);
         questService.enable(questId, packId);
         return true;
     }
 
     public void addUser(String packId, String userId, String inviterId) {
-        userProcessor.addQuestPack(userId, packId, inviterId);
-        questPackProcessor.addUser(packId, userId, inviterId);
+        userProjector.addQuestPack(userId, packId, inviterId);
+        questPackProjector.addUser(packId, userId, inviterId);
     }
 }

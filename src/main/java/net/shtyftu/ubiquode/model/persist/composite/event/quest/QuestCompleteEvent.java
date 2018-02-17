@@ -22,4 +22,9 @@ public class QuestCompleteEvent extends QuestEvent {
             quest.setDeadlineAt(cooldownTill + quest.getProto().getDeadline());
         }
     }
+
+    @Override
+    public String getViewName() {
+        return "Complete";
+    }
 }

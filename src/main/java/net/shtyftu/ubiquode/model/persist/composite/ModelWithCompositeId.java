@@ -5,7 +5,6 @@ import net.shtyftu.ubiquode.model.persist.simple.ModelWithId;
 /**
  * @author shtyftu
  */
-@Deprecated
 public abstract class ModelWithCompositeId<P> extends ModelWithId {
 
     private final P clusteringId;
@@ -15,7 +14,7 @@ public abstract class ModelWithCompositeId<P> extends ModelWithId {
         this.clusteringId = clusteringId;
     }
 
-    public P getClusteringId() {
+    protected P getClusteringId() {
         return clusteringId;
     }
 

@@ -21,4 +21,8 @@ public class QuestLockEvent extends QuestEvent {
         quest.setUserId(userId);
     }
 
+    @Override
+    public String getViewName() {
+        return "Lock";
+    }
 }

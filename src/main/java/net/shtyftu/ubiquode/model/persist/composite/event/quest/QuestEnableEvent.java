@@ -23,4 +23,9 @@ public class QuestEnableEvent extends QuestEvent {
             quest.setDeadlineAt(getTime() + deadline);
         }
     }
+
+    @Override
+    public String getViewName() {
+        return "Enable";
+    }
 }

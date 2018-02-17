@@ -18,4 +18,9 @@ public class QuestSetProtoIdEvent extends QuestEvent {
     public void applyTo(Quest quest) {
         quest.setProtoId(protoId);
     }
+
+    @Override
+    public String getViewName() {
+        return "Set proto id";
+    }
 }
