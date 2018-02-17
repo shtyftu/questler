@@ -1,6 +1,7 @@
 package net.shtyftu.ubiquode.model.view;
 
-import java.sql.Timestamp;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import net.shtyftu.ubiquode.model.persist.composite.event.quest.QuestEvent;
 
 /**
@@ -14,7 +15,12 @@ public class QuestEventView {
     private final String questName;
 
     public QuestEventView(QuestEvent event, String name, String userId) {
-        this(new Timestamp(event.getTime()).toLocalDateTime().toString(), userId, event.getViewName(), name);
+        this(
+                new SimpleDateFormat("yyy-MM-dd HH:mm").format(new Date(event.getTime())),
+                userId,
+                event.getViewName(),
+                name
+        );
     }
 
     private QuestEventView(String time, String userId, String eventType, String questName) {
