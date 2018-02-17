@@ -6,10 +6,28 @@
     <jsp:body>
         <h3>Quest Stats:</h3>
         <div class="table-responsive">
+            <table class="table table-striped">
+                <tr>
+                    <c:forEach var="durationValue" items="${durations}">
+                        <td>
+                            <c:if test="${!(durationValue eq duration)}">
+                                <a href="/stats/list?duration=${durationValue}">${durationValue}</a>
+                            </c:if>
+                            <c:if test="${durationValue eq duration}">
+                                <p>${durationValue}</p>
+                            </c:if>
+                        </td>
+                    </c:forEach>
+                </tr>
+            </table>
+        </div>
+        <div class="table-responsive">
             <c:forEach var="pack" items="${packs}">
-                <table class="table table-striped table-bordered">
+                <table class="table table-striped">
                     <thead class="text-center">
-                    <tr><td colspan="4"><h5><b>${pack.name}</b></h5></td></tr>
+                    <tr>
+                        <td colspan="4"><h5><b>${pack.name}</b></h5></td>
+                    </tr>
                     </thead>
                     <tbody>
                     <c:forEach var="event" items="${pack.events}">

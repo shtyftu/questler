@@ -2,6 +2,8 @@ package net.shtyftu.ubiquode.model.view;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.SimpleTimeZone;
+import java.util.concurrent.TimeUnit;
 import net.shtyftu.ubiquode.model.persist.composite.event.quest.QuestEvent;
 
 /**
@@ -14,20 +16,13 @@ public class QuestEventView {
     private final String eventType;
     private final String questName;
 
-    public QuestEventView(QuestEvent event, String name, String userId) {
-        this(
-                new SimpleDateFormat("yyy-MM-dd HH:mm").format(new Date(event.getTime())),
-                userId,
-                event.getViewName(),
-                name
-        );
-    }
-
-    private QuestEventView(String time, String userId, String eventType, String questName) {
-        this.time = time;
-        this.userId = userId;
-        this.eventType = eventType;
-        this.questName = questName;
+    public QuestEventView(QuestEvent event, String name, String user) {
+        final SimpleDateFormat formatter = new SimpleDateFormat("yyy-MM-dd HH:mm");
+        formatter.setTimeZone(new SimpleTimeZone(Math.toIntExact(TimeUnit.HOURS.toMillis(3)), "timeZone"));
+        time = formatter.format(new Date(event.getTime()));
+        userId = user;
+        eventType = event.getViewName();
+        questName = name;
     }
 
     public String getTime() {

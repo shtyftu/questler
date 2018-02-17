@@ -6,7 +6,7 @@
     <jsp:body>
         <h3>Quest Proto list:</h3>
         <div class="table-responsive">
-            <table class="table table-striped table-bordered">
+            <table class="table table-striped">
                 <thead class="text-center">
                 <tr>
                     <td colspan="2">
@@ -28,7 +28,7 @@
 
 
             <c:forEach var="pack" items="${list}">
-                <table class="table table-striped table-bordered">
+                <table class="table table-striped">
                     <thead class="text-center">
                     <tr>
                         <td colspan="2">

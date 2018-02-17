@@ -41,6 +41,7 @@ public abstract class AController {
         return principal instanceof String ? (String) principal : null;
     }
 
+    //TODO попробовать переписать на @ModelAttribute и контекст
     protected abstract Map<String, Object> getDefaultViewModel();
 
     protected ModelAndView getMessageView(List<Object> messages) {
@@ -55,7 +56,7 @@ public abstract class AController {
         return ImmutableMap.of("errors", errors1);
     }
 
-    private ModelAndView getDefaultPathView(Map<String, Object> viewModel) {
+    protected ModelAndView getDefaultPathView(Map<String, Object> viewModel) {
         final Map<String, Object> fullViewModel = new HashMap<>();
         fullViewModel.putAll(getDefaultViewModel());
         fullViewModel.putAll(viewModel);

@@ -7,7 +7,7 @@
     <jsp:body>
         <div class="table-responsive">
             <label class="control-label"><h3>Your quests:</h3></label>
-            <table class="table table-striped table-bordered">
+            <table class="table table-striped">
                 <c:forEach var="quest" items="${questList}">
                     <tr>
                         <form:form method="POST" action="${quest.actionLink}">
@@ -29,7 +29,7 @@
         <div class="table-responsive">
             <label class="control-label"><h3>Scoreboards:</h3></label>
             <c:forEach var="scores" items="${scoresList}">
-                <table class="table table-striped table-bordered">
+                <table class="table table-striped">
                     <thead class="text-center">
                     <tr>
                         <td colspan="2" class="text-center">

@@ -43,13 +43,8 @@ public class QuestStatsService {
         this.userEventDao = userEventDao;
     }
 
-    public List<QuestEventView> getQuestEventViews(@Nonnull QuestPack questPack) {
-
-//                final long now = System.currentTimeMillis();
-//        final long statsDuration = TimeUnit.DAYS.toMillis(14);
-//        final long threshold = now - statsDuration;
-        final long threshold = 0;
-
+    public List<QuestEventView> getQuestEventViews(@Nonnull QuestPack questPack, long delta) {
+        final long threshold = System.currentTimeMillis() - delta;
         final TreeMap<Long, QuestEventView> eventViewsMap = new TreeMap<>(Collections.reverseOrder());
         final Map<String, Set<Long>> eventTimesByUserId = questPack.getUserScores().keySet().stream()
                 .collect(Collectors.toMap(
