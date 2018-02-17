@@ -1,5 +1,6 @@
 package net.shtyftu.ubiquode.service;
 
+import java.util.UUID;
 import net.shtyftu.ubiquode.processor.QuestPackProjector;
 import net.shtyftu.ubiquode.processor.QuestProjector;
 import net.shtyftu.ubiquode.processor.UserProjector;
@@ -28,9 +29,11 @@ public class QuestPackService {
     }
 
     public String create(String name, String userId) {
-        final String packId = userProjector.addNewQuestPack(userId);
+        final String packId = UUID.randomUUID().toString();
         questPackProjector.setName(packId, name);
-        questPackProjector.addUser(packId, userId, userId);
+
+        final long eventTime = questPackProjector.addUser(packId, userId, userId);
+        userProjector.addNewQuestPack(userId, packId, eventTime);
         return packId;
     }
 
@@ -45,7 +48,7 @@ public class QuestPackService {
     }
 
     public void addUser(String packId, String userId, String inviterId) {
-        userProjector.addQuestPack(userId, packId, inviterId);
-        questPackProjector.addUser(packId, userId, inviterId);
+        final long eventTime = questPackProjector.addUser(packId, userId, inviterId);
+        userProjector.addQuestPack(userId, packId, inviterId, eventTime);
     }
 }

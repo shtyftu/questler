@@ -33,25 +33,25 @@ public class QuestPackProjector extends Projector<QuestPack, QuestPackEvent> {
 
     public String addQuest(String packId, String protoId, String userId) {
         final QuestProto proto = questProtoDao.getById(protoId);
-        if (proto != null) {
-            final QuestPackAddQuestEvent event = new QuestPackAddQuestEvent(packId, userId, protoId);
-            save(event);
-            return event.getQuestId();
-        } else {
+        if (proto == null) {
             return null;
         }
+        final QuestPackAddQuestEvent event = new QuestPackAddQuestEvent(packId, userId, protoId);
+        save(event);
+        return event.getQuestId();
     }
 
     public void setName(String packId, String name) {
         save(new QuestPackRenameEvent(packId, name));
     }
 
-    public void addScores(String packId, String userId, int scores) {
-        save(new QuestPackAddScoresToPlayerEvent(packId, userId, scores));
-
+    public void addScores(String packId, String userId, int scores, long eventTime) {
+        save(new QuestPackAddScoresToPlayerEvent(packId, userId, scores, eventTime));
     }
 
-    public void addUser(String packId, String userId, String inviterId) {
-        save(new QuestPackAddUserEvent(packId, userId, inviterId));
+    public long addUser(String packId, String userId, String inviterId) {
+        final QuestPackAddUserEvent event = new QuestPackAddUserEvent(packId, userId, inviterId);
+        save(event);
+        return event.getTime();
     }
 }

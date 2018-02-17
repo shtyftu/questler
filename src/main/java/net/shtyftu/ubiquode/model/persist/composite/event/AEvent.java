@@ -11,6 +11,10 @@ public abstract class AEvent<T> extends ModelWithCompositeId<Long> implements Co
         super(id, System.currentTimeMillis());
     }
 
+    protected AEvent(String id, long otherEventTime) {
+        super(id, otherEventTime);
+    }
+
     public abstract void applyTo(T entity);
 
     @Override

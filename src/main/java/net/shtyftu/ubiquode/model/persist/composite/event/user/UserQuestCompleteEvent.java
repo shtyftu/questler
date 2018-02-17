@@ -9,14 +9,13 @@ public class UserQuestCompleteEvent extends UserEvent {
 
     private final int scores;
 
-    public UserQuestCompleteEvent(String userId, int scores) {
-        super(userId);
+    public UserQuestCompleteEvent(String userId, int scores, long eventTime) {
+        super(userId, eventTime);
         this.scores = scores;
     }
 
     @Override
     public void applyTo(User user) {
-//        user.setScore(user.getScore() + scores);
         user.setLockedQuestId(null);
         user.setUnableToLockQuestTill(null);
         user.setMustCompleteQuestTill(null);

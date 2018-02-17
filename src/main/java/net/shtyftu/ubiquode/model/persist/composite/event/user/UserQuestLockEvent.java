@@ -10,8 +10,8 @@ public class UserQuestLockEvent extends UserEvent {
 
     private final String questId;
 
-    public UserQuestLockEvent(String userId, String questId) {
-        super(userId);
+    public UserQuestLockEvent(String userId, String questId, long eventTime) {
+        super(userId, eventTime);
         this.questId = questId;
     }
 

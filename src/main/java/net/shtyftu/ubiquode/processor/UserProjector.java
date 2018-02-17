@@ -28,21 +28,19 @@ public class UserProjector extends Projector<User, UserEvent> {
         return new User(key);
     }
 
-    public void lock(String userId, String questId) {
-        save(new UserQuestLockEvent(userId, questId));
+    public void lock(String userId, String questId, long eventTime) {
+        save(new UserQuestLockEvent(userId, questId, eventTime));
     }
 
-    public void complete(String userId, int scores) {
-        save(new UserQuestCompleteEvent(userId, scores));
+    public void complete(String userId, int scores, long eventTime) {
+        save(new UserQuestCompleteEvent(userId, scores, eventTime));
     }
 
-    public String addNewQuestPack(String userId) {
-        final String packId = UUID.randomUUID().toString();
-        save(new UserAddQuestPackEvent(userId, packId, userId));
-        return packId;
+    public void addNewQuestPack(String userId, String packId, long eventTime) {
+        save(new UserAddQuestPackEvent(userId, packId, userId, eventTime));
     }
 
-    public void addQuestPack(String userId, String packId, String inviterUserId) {
-        save(new UserAddQuestPackEvent(userId, packId, inviterUserId));
+    public void addQuestPack(String userId, String packId, String inviterUserId, long eventTime) {
+        save(new UserAddQuestPackEvent(userId, packId, inviterUserId, eventTime));
     }
 }

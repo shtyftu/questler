@@ -56,8 +56,8 @@ public class QuestService {
         if (!canBeLocked(userId, packId, state)) {
             return false;
         }
-        questProjector.lock(questId, userId);
-        userProjector.lock(userId, questId);
+        final long eventTime = questProjector.lock(questId, userId);
+        userProjector.lock(userId, questId, eventTime);
         return true;
     }
 
@@ -97,13 +97,13 @@ public class QuestService {
             return false;
         }
 
-        questProjector.complete(questId);
+        final long eventTime = questProjector.complete(questId);
         final QuestPack questPack = questPackProjector.getById(packId);
         final String protoId = questPack.getProtoIdsByQuestId().get(questId);
         final QuestProto questProto = questProtoDao.getById(protoId);
         final int scores = questProto.getScores();
-        userProjector.complete(userId, scores);
-        questPackProjector.addScores(packId, userId, scores);
+        questPackProjector.addScores(packId, userId, scores, eventTime);
+        userProjector.complete(userId, scores, eventTime);
         return true;
     }
 

@@ -31,12 +31,16 @@ public class QuestProjector extends Projector<Quest, QuestEvent> {
         return new Quest(questId, protoDao);
     }
 
-    public void lock(String questId, String userId) {
-        save(new QuestLockEvent(questId, userId));
+    public long lock(String questId, String userId) {
+        final QuestLockEvent event = new QuestLockEvent(questId, userId);
+        save(event);
+        return event.getTime();
     }
 
-    public void complete(String questId) {
-        save(new QuestCompleteEvent(questId));
+    public long complete(String questId) {
+        final QuestCompleteEvent event = new QuestCompleteEvent(questId);
+        save(event);
+        return event.getTime();
     }
 
     public void enable(String questId, long deadline) {

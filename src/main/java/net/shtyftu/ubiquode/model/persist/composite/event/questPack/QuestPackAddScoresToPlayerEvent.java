@@ -11,8 +11,8 @@ public class QuestPackAddScoresToPlayerEvent extends QuestPackEvent {
     private final String userId;
     private final int scores;
 
-    public QuestPackAddScoresToPlayerEvent(String packId, String userId, int scores) {
-        super(packId);
+    public QuestPackAddScoresToPlayerEvent(String packId, String userId, int scores, long eventTime) {
+        super(packId, eventTime);
         this.userId = userId;
         this.scores = scores;
     }

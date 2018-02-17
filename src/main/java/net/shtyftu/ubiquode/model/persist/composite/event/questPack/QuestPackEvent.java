@@ -11,4 +11,8 @@ public abstract class QuestPackEvent extends AEvent<QuestPack> {
     QuestPackEvent(String questPackId) {
         super(questPackId);
     }
+
+    QuestPackEvent(String id, long otherEventTime) {
+        super(id, otherEventTime);
+    }
 }
