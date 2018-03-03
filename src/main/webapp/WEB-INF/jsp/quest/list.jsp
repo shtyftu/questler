@@ -11,10 +11,10 @@
                 <c:forEach var="quest" items="${questList}">
                     <tr class="quest-row align-middle" data-state="${quest.state}">
                         <form:form method="POST" action="${quest.actionLink}">
-                            <td>${quest.name}</td>
-                            <td><span class="badge">${quest.scores}</span></td>
-                            <td class="timer" data-time="${quest.time}"></td>
-                            <td class="text-center">
+                            <td class="align-middle">${quest.name}</td>
+                            <td class="align-middle"><span class="badge badge-secondary">${quest.scores}</span></td>
+                            <td class="align-middle timer" data-time="${quest.time}"></td>
+                            <td class="align-middle text-center">
                                 <c:if test="${not empty quest.actionLink}">
                                     <input type="submit" class="btn btn-secondary"
                                            value="${quest.actionName}"/>
@@ -81,7 +81,7 @@
                 $questRow.addClass("btn-success");
                 break;
               case "WaitingTrigger":
-                $questRow.addClass("btn-secondary");
+                $questRow.addClass("btn-primary");
                 break;
               case "OnCooldown":
                 $questRow.addClass("btn-info");
