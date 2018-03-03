@@ -26,23 +26,21 @@ public class QuestView implements Comparable<QuestView> {
         this.packId = pack.getId();
         this.packName = pack.getName();
         this.scores = quest.getProto().getScores();
-        State state = quest.getState();
-        if (state == State.Available && !canBeLocked) {
-            state = State.Unavailable;
-        }
-        this.state = state.prettyName();
+        final State state = quest.getState();
+        this.state = state.name();
         this.order = state.getOrder();
 
         switch (state) {
             case Available:
                 this.time = quest.getDeadlineAt();
-                this.actionLink = getLink("lock");
-                this.actionName = "Lock";
-                break;
-            case Unavailable:
-                this.time = null;
-                this.actionLink = "";
-                this.actionName = "";
+                if (canBeLocked) {
+                    this.actionLink = getLink("lock");
+                    this.actionName = "Lock";
+                } else {
+                    this.actionLink = "";
+                    this.actionName = "Unavailable";
+
+                }
                 break;
             case DeadlinePanic:
                 this.time = quest.getDeadlineAt();
@@ -52,7 +50,7 @@ public class QuestView implements Comparable<QuestView> {
             case OnCooldown:
                 this.time = quest.getCooldownTill();
                 this.actionLink = "";
-                this.actionName = "";
+                this.actionName = "Cooldown";
                 break;
             case WaitingTrigger:
                 this.time = null;
@@ -71,7 +69,7 @@ public class QuestView implements Comparable<QuestView> {
                     this.actionName = "Done";
                 } else {
                     this.actionLink = "";
-                    this.actionName = "";
+                    this.actionName = "Locked";
                 }
                 break;
             default:

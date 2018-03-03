@@ -20,7 +20,7 @@
                         <td>
                             <input style="width: 100%;" type="text" placeholder="Name" name="name" required="required"/>
                         </td>
-                        <td><input type="submit" class="btn btn-success" value="Create"/></td>
+                        <td><input type="submit" class="btn btn-secondary" value="Create"/></td>
                     </tr>
                 </form>
                 </tbody>
@@ -42,7 +42,7 @@
                             <td>${entry.key}</td>
                             <td>
                                 <a href="/pack/edit-quest?id=${entry.value}&packId=${pack.id}">
-                                    <button class="btn btn-success">Edit</button>
+                                    <button class="btn btn-secondary">Edit</button>
                                 </a>
                             </td>
                         </tr>

@@ -7,18 +7,20 @@
     <jsp:body>
         <div class="table-responsive">
             <label class="control-label"><h3>Your quests:</h3></label>
-            <table class="table table-striped">
+            <table class="table">
                 <c:forEach var="quest" items="${questList}">
-                    <tr>
+                    <tr class="quest-row align-middle" data-state="${quest.state}">
                         <form:form method="POST" action="${quest.actionLink}">
                             <td>${quest.name}</td>
                             <td><span class="badge">${quest.scores}</span></td>
-                            <td>${quest.state}</td>
                             <td class="timer" data-time="${quest.time}"></td>
                             <td class="text-center">
                                 <c:if test="${not empty quest.actionLink}">
-                                    <input type="submit" class="btn btn-success"
+                                    <input type="submit" class="btn btn-secondary"
                                            value="${quest.actionName}"/>
+                                </c:if>
+                                <c:if test="${empty quest.actionLink}">
+                                    ${quest.actionName}
                                 </c:if>
                             </td>
                         </form:form>
@@ -62,8 +64,30 @@
               }
             });
           };
-          adjustTime()
-          setInterval(adjustTime, 1000)
+          adjustTime();
+          setInterval(adjustTime, 1000);
+
+          $(".quest-row").each(function (index, questRow) {
+            var $questRow = $(questRow);
+            var state = $questRow.attr("data-state");
+            switch (state) {
+              case "Available":
+                $questRow.addClass("btn-warning");
+                break;
+              case "DeadlinePanic":
+                $questRow.addClass("btn-danger");
+                break;
+              case "LockedByUser":
+                $questRow.addClass("btn-success");
+                break;
+              case "WaitingTrigger":
+                $questRow.addClass("btn-secondary");
+                break;
+              case "OnCooldown":
+                $questRow.addClass("btn-info");
+                break;
+            }
+          })
         </script>
     </jsp:body>
 </t:page>
