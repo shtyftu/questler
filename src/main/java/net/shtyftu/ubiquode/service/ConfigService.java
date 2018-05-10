@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 public class ConfigService {
 
     public static final long QUEST_LOCK_TIME = TimeUnit.HOURS.toMillis(2);
-    public static final long UNCOMPLETED_LOCK_PENALTY_TIME = TimeUnit.HOURS.toMillis(8);
+    public static final long UNCOMPLETED_LOCK_PENALTY_TIME = TimeUnit.HOURS.toMillis(0);
     public static final long PANIC_TIME_BEFORE_DEADLINE = TimeUnit.HOURS.toMillis(12);
 
 
