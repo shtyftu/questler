@@ -1,6 +1,7 @@
 package net.shtyftu.ubiquode.dao.plain;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -13,6 +14,9 @@ public interface Dao<E extends ModelWithId> {
 
     @Nullable
     E getById(String id);
+
+    @Nonnull
+    Optional<E> getOptional(String id);
 
     Set<String> getAllIds();
 

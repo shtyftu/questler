@@ -3,6 +3,7 @@ package net.shtyftu.ubiquode.dao.plain;
 import com.google.gson.reflect.TypeToken;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
@@ -35,6 +36,12 @@ public class RedisModelWithIdDao<E extends ModelWithId> extends RedisDao<E> impl
         }
         final String model = redisCmd().get(getModelKey(id));
         return deserialize(model);
+    }
+
+    @Override
+    @Nonnull
+    public Optional<E> getOptional(String id) {
+        return Optional.ofNullable(getById(id));
     }
 
     @Override

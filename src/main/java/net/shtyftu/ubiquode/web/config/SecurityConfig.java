@@ -1,17 +1,16 @@
 package net.shtyftu.ubiquode.web.config;
 
-import net.shtyftu.ubiquode.web.security.AuthFilter;
-import net.shtyftu.ubiquode.web.security.EntryPoint;
-import net.shtyftu.ubiquode.web.security.TokenProvider;
+import net.shtyftu.ubiquode.dao.plain.LoginTokenWrapperDao;
+import net.shtyftu.ubiquode.web.security.RedisLoginTokenRepository;
+import net.shtyftu.ubiquode.web.security.AuthTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 /**
  * @author shtyftu
@@ -19,15 +18,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final TokenProvider tokenAuthenticationProvider;
-    private final EntryPoint entryPoint;
-    private final AuthFilter authFilter;
+    private final AuthTokenProvider authTokenProvider;
+    private final LoginTokenWrapperDao tokenDao;
 
     @Autowired
-    public SecurityConfig(TokenProvider tokenAuthenticationProvider, EntryPoint entryPoint, AuthFilter authFilter) {
-        this.tokenAuthenticationProvider = tokenAuthenticationProvider;
-        this.entryPoint = entryPoint;
-        this.authFilter = authFilter;
+    public SecurityConfig(AuthTokenProvider authTokenProvider, LoginTokenWrapperDao tokenDao) {
+        this.authTokenProvider = authTokenProvider;
+        this.tokenDao = tokenDao;
     }
 
     @Bean(name = "authenticationManager")
@@ -38,29 +35,41 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(tokenAuthenticationProvider);
+        auth.authenticationProvider(authTokenProvider);
     }
-
-    @Bean
-    public FilterRegistrationBean filterRegistrationBean() {
-        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
-        registrationBean.setFilter(authFilter);
-        registrationBean.setEnabled(false);
-        return registrationBean;
-    }
-
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf().disable()
+
                 .authorizeRequests()
-                .antMatchers("/css/**", "/register", "/login").permitAll()
+                .antMatchers("/css/**").permitAll()
                 .antMatchers("/**").hasAuthority("USER")
                 .and()
-                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
-                .authenticationProvider(tokenAuthenticationProvider)
-                .exceptionHandling().authenticationEntryPoint(entryPoint);
+
+                .formLogin()
+                .loginPage("/login-page")
+                .failureUrl("/login-page?error")
+                .loginProcessingUrl("/login-check")
+                .defaultSuccessUrl("/quest/list", true)
+                .usernameParameter("login")
+                .passwordParameter("password")
+                .permitAll()
+                .and()
+
+                .authenticationProvider(authTokenProvider)
+
+                .rememberMe()
+                .rememberMeCookieName("questler-remember-me")
+                .tokenValiditySeconds(30 * 24 * 60 * 60) // expired time = 30 day
+                .tokenRepository(persistentTokenRepository())
+        ;
+    }
+
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository() {
+        return new RedisLoginTokenRepository(tokenDao);
     }
 
 }

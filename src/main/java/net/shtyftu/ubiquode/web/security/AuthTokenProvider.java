@@ -17,10 +17,14 @@ import org.springframework.stereotype.Component;
  * @author shtyftu
  */
 @Component
-public final class TokenProvider implements AuthenticationProvider {
+public final class AuthTokenProvider implements AuthenticationProvider {
+
+    private final AccountService service;
 
     @Autowired
-    private AccountService service;
+    public AuthTokenProvider(AccountService service) {
+        this.service = service;
+    }
 
     @Override
     public boolean supports(final Class<?> authentication) {
