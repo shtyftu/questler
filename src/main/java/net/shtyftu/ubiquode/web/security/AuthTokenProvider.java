@@ -47,6 +47,7 @@ public final class AuthTokenProvider implements AuthenticationProvider {
             if (CollectionUtils.isEmpty(authorities)) {
                 throw new BadCredentialsException("error");
             }
+            //TODO use here UserDetail instead string principal
             return new UsernamePasswordAuthenticationToken(principal, credentials, authorities);
 
         } catch (AuthenticationException e) {

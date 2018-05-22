@@ -1,8 +1,9 @@
 package net.shtyftu.ubiquode.web.config;
 
 import net.shtyftu.ubiquode.dao.plain.LoginTokenWrapperDao;
-import net.shtyftu.ubiquode.web.security.RedisLoginTokenRepository;
+import net.shtyftu.ubiquode.service.AccountService;
 import net.shtyftu.ubiquode.web.security.AuthTokenProvider;
+import net.shtyftu.ubiquode.web.security.RedisLoginTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,11 +21,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final AuthTokenProvider authTokenProvider;
     private final LoginTokenWrapperDao tokenDao;
+    private final AccountService accountService;
 
     @Autowired
-    public SecurityConfig(AuthTokenProvider authTokenProvider, LoginTokenWrapperDao tokenDao) {
+    public SecurityConfig(AuthTokenProvider authTokenProvider, LoginTokenWrapperDao tokenDao,
+            AccountService accountService) {
         this.authTokenProvider = authTokenProvider;
         this.tokenDao = tokenDao;
+        this.accountService = accountService;
     }
 
     @Bean(name = "authenticationManager")
@@ -62,6 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .rememberMe()
                 .rememberMeCookieName("questler-remember-me")
+                .userDetailsService(accountService::getByUsername)
                 .tokenValiditySeconds(30 * 24 * 60 * 60) // expired time = 30 day
                 .tokenRepository(persistentTokenRepository())
         ;
