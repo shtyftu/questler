@@ -1,9 +1,9 @@
 package net.shtyftu.ubiquode.service;
 
 import java.util.UUID;
-import net.shtyftu.ubiquode.processor.QuestPackProjector;
-import net.shtyftu.ubiquode.processor.QuestProjector;
-import net.shtyftu.ubiquode.processor.UserProjector;
+import net.shtyftu.ubiquode.processor.QuestPackRepository;
+import net.shtyftu.ubiquode.processor.QuestRepository;
+import net.shtyftu.ubiquode.processor.UserRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,14 +14,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class QuestPackService {
 
-    private final QuestPackProjector questPackProjector;
-    private final QuestProjector questProjector;
+    private final QuestPackRepository questPackProjector;
+    private final QuestRepository questProjector;
     private final QuestService questService;
-    private final UserProjector userProjector;
+    private final UserRepository userProjector;
 
     @Autowired
-    public QuestPackService(QuestPackProjector questPackProjector, QuestProjector questProjector,
-            QuestService questService, UserProjector userProjector) {
+    public QuestPackService(QuestPackRepository questPackProjector, QuestRepository questProjector,
+            QuestService questService, UserRepository userProjector) {
         this.questPackProjector = questPackProjector;
         this.questProjector = questProjector;
         this.questService = questService;

@@ -10,6 +10,7 @@ public class QuestProto extends ModelWithMetaData {
     private Long deadline;
     private int scores;
     private boolean activatedByTrigger;
+    private String nextQuestId;
 
     @SuppressWarnings("unused")
     public QuestProto() {
@@ -70,5 +71,13 @@ public class QuestProto extends ModelWithMetaData {
 
     public void setActivatedByTrigger(boolean activatedByTrigger) {
         this.activatedByTrigger = activatedByTrigger;
+    }
+
+    public String getNextQuestId() {
+        return nextQuestId;
+    }
+
+    public void setNextQuestId(String nextQuestId) {
+        this.nextQuestId = nextQuestId;
     }
 }

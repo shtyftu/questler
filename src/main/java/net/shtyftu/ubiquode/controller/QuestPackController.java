@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -23,9 +25,9 @@ import net.shtyftu.ubiquode.model.projection.User;
 import net.shtyftu.ubiquode.model.view.QuestPackLightView;
 import net.shtyftu.ubiquode.model.view.QuestPackView;
 import net.shtyftu.ubiquode.model.view.QuestProtoView;
-import net.shtyftu.ubiquode.processor.QuestPackProjector;
-import net.shtyftu.ubiquode.processor.QuestProjector;
-import net.shtyftu.ubiquode.processor.UserProjector;
+import net.shtyftu.ubiquode.processor.QuestPackRepository;
+import net.shtyftu.ubiquode.processor.QuestRepository;
+import net.shtyftu.ubiquode.processor.UserRepository;
 import net.shtyftu.ubiquode.service.QuestPackService;
 import net.shtyftu.ubiquode.service.QuestProtoService;
 import org.apache.commons.collections4.CollectionUtils;
@@ -47,20 +49,20 @@ import org.springframework.web.servlet.ModelAndView;
 public class QuestPackController extends AController {
 
     private final QuestProtoDao questProtoDao;
-    private final UserProjector userProjector;
-    private final QuestPackProjector questPackProjector;
-    private final QuestProjector questProjector;
+    private final UserRepository userProjector;
+    private final QuestPackRepository questPackRepository;
+    private final QuestRepository questProjector;
     private final QuestProtoService questProtoService;
     private final QuestPackService questPackService;
     private final AccountDao accountDao;
 
     @Autowired
-    public QuestPackController(QuestProtoDao questProtoDao, UserProjector userProjector,
-            QuestPackProjector questPackProjector, QuestProjector questProjector,
-           QuestProtoService questProtoService, QuestPackService questPackService, AccountDao accountDao) {
+    public QuestPackController(QuestProtoDao questProtoDao, UserRepository userProjector,
+            QuestPackRepository questPackRepository, QuestRepository questProjector,
+            QuestProtoService questProtoService, QuestPackService questPackService, AccountDao accountDao) {
         this.questProtoDao = questProtoDao;
         this.userProjector = userProjector;
-        this.questPackProjector = questPackProjector;
+        this.questPackRepository = questPackRepository;
         this.questProjector = questProjector;
         this.questProtoService = questProtoService;
         this.questPackService = questPackService;
@@ -78,7 +80,7 @@ public class QuestPackController extends AController {
         final User user = userProjector.getById(userId);
         final List<String> questPackIds = user.getQuestPackIds();
         final List<QuestPackLightView> view = questPackIds.stream()
-                .map(questPackProjector::getById)
+                .map(questPackRepository::getById)
                 .map((questPack) -> new QuestPackLightView(
                         questPack,
                         questPack.getProtoIdsByQuestId().values().stream()
@@ -98,7 +100,7 @@ public class QuestPackController extends AController {
 
     @RequestMapping(value = EDIT_PATH, method = RequestMethod.GET)
     public Map<String, Object> edit(@RequestParam(name = "packId") String packId) {
-        final QuestPack pack = questPackProjector.getById(packId);
+        final QuestPack pack = questPackRepository.getById(packId);
         final Set<String> questIds = pack.getProtoIdsByQuestId().keySet();
         final Map<String, String> questNamesById = questIds.stream()
                 .map(questProjector::getById)
@@ -124,7 +126,7 @@ public class QuestPackController extends AController {
         final String userId = getUserId();
         final String packId = packView.getId();
 
-        final QuestPack questPack = questPackProjector.getById(packId);
+        final QuestPack questPack = questPackRepository.getById(packId);
         final Collection<String> currentProtoIds = questPack.getProtoIdsByQuestId().values();
 
         final List<String> errorProtoIds = new ArrayList<>();
@@ -160,7 +162,15 @@ public class QuestPackController extends AController {
     @RequestMapping(value = "/edit-quest", method = RequestMethod.GET)
     public Map<String, Object> editQuest(@RequestParam("id") String protoId, @RequestParam("packId") String packId) {
         final QuestProto questProto = ObjectUtils.defaultIfNull(questProtoDao.getById(protoId), new QuestProto());
-        return ImmutableMap.of("questProto", questProto, "packId", packId);
+        final QuestPack questPack = ObjectUtils.defaultIfNull(questPackRepository.getById(packId), new QuestPack(null));
+        final Map<String, String> nextQuestNamesById = questPack.getProtoIdsByQuestId().entrySet().stream()
+                .filter(e -> !protoId.equals(e.getValue()))
+                .collect(Collectors.toMap(
+                        Entry::getKey,
+                        e -> Optional.ofNullable(questProtoDao.getById(e.getValue()))
+                                .map(QuestProto::getName).orElse(e.getValue())
+                ));
+        return ImmutableMap.of("questProto", questProto, "packId", packId, "nextQuest", nextQuestNamesById);
     }
 
     //TODO move onto the proto controller

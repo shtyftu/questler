@@ -10,9 +10,9 @@ import net.shtyftu.ubiquode.model.persist.simple.QuestProto;
 import net.shtyftu.ubiquode.model.projection.Quest;
 import net.shtyftu.ubiquode.model.projection.Quest.State;
 import net.shtyftu.ubiquode.model.projection.User;
-import net.shtyftu.ubiquode.processor.QuestPackProjector;
-import net.shtyftu.ubiquode.processor.QuestProjector;
-import net.shtyftu.ubiquode.processor.UserProjector;
+import net.shtyftu.ubiquode.processor.QuestPackRepository;
+import net.shtyftu.ubiquode.processor.QuestRepository;
+import net.shtyftu.ubiquode.processor.UserRepository;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,16 +24,16 @@ import org.springframework.stereotype.Service;
 public class QuestService {
 
     private final QuestProtoDao questProtoDao;
-    private final QuestProjector questProjector;
-    private final QuestPackProjector questPackProjector;
-    private final UserProjector userProjector;
+    private final QuestRepository questRepository;
+    private final QuestPackRepository questPackRepository;
+    private final UserRepository userProjector;
 
     @Autowired
-    public QuestService(QuestProtoDao questProtoDao, QuestProjector questProjector,
-            QuestPackProjector questPackProjector, UserProjector userProjector) {
+    public QuestService(QuestProtoDao questProtoDao, QuestRepository questProjector,
+            QuestPackRepository questPackRepository, UserRepository userProjector) {
         this.questProtoDao = questProtoDao;
-        this.questProjector = questProjector;
-        this.questPackProjector = questPackProjector;
+        this.questRepository = questProjector;
+        this.questPackRepository = questPackRepository;
         this.userProjector = userProjector;
     }
 
@@ -41,11 +41,11 @@ public class QuestService {
         final User user = userProjector.getById(userId);
         final List<String> questPackIds = user.getQuestPackIds();
         return questPackIds.stream()
-                .map(questPackProjector::getById)
+                .map(questPackRepository::getById)
                 .collect(Collectors.toMap(
                         pack -> pack,
                         pack -> pack.getProtoIdsByQuestId().keySet().stream()
-                                .map(questProjector::getById)
+                                .map(questRepository::getById)
                                 .filter(Objects::nonNull)
                                 .collect(Collectors.toList())));
     }
@@ -56,7 +56,7 @@ public class QuestService {
         if (!canBeLocked(userId, packId, state)) {
             return false;
         }
-        final long eventTime = questProjector.lock(questId, userId);
+        final long eventTime = questRepository.lock(questId, userId);
         userProjector.lock(userId, questId, eventTime);
         return true;
     }
@@ -66,10 +66,10 @@ public class QuestService {
             return false;
         }
 
-        final QuestPack questPack = questPackProjector.getById(packId);
+        final QuestPack questPack = questPackRepository.getById(packId);
         if (State.DeadlinePanic != state) {
             final List<Quest> deadlinePanicQuests = questPack.getProtoIdsByQuestId().keySet().stream()
-                    .map(questProjector::getById)
+                    .map(questRepository::getById)
                     .filter(Objects::nonNull)
                     .filter(q -> State.DeadlinePanic == q.getState())
                     .collect(Collectors.toList());
@@ -97,31 +97,35 @@ public class QuestService {
             return false;
         }
 
-        final long eventTime = questProjector.complete(questId);
-        final QuestPack questPack = questPackProjector.getById(packId);
+        final long eventTime = questRepository.complete(questId);
+        final QuestPack questPack = questPackRepository.getById(packId);
         final String protoId = questPack.getProtoIdsByQuestId().get(questId);
         final QuestProto questProto = questProtoDao.getById(protoId);
         final int scores = questProto.getScores();
-        questPackProjector.addScores(packId, userId, scores, eventTime);
+        questPackRepository.addScores(packId, userId, scores, eventTime);
         userProjector.complete(userId, scores, eventTime);
+
+        if (questProto.getNextQuestId() != null) {
+            trigger(questProto.getNextQuestId());
+        }
         return true;
     }
 
     public boolean enable(String questId, String packId) {
         final Quest quest = get(questId);
         if (State.Disabled.equals(quest.getState())) {
-            final QuestPack questPack = questPackProjector.getById(packId);
+            final QuestPack questPack = questPackRepository.getById(packId);
             final String protoId = questPack.getProtoIdsByQuestId().get(questId);
             final QuestProto proto = questProtoDao.getById(protoId);
             final Long deadline = proto.getDeadline();
-            questProjector.enable(questId, deadline);
+            questRepository.enable(questId, deadline);
             return true;
         }
         return false;
     }
 
     private Quest get(String questId) {
-        return questProjector.getById(questId);
+        return questRepository.getById(questId);
     }
 
     public boolean trigger(String questId) {
@@ -129,7 +133,7 @@ public class QuestService {
         final QuestProto proto = quest.getProto();
         if (proto.isActivatedByTrigger() && State.WaitingTrigger.equals(quest.getState())){
             final Long deadline = proto.getDeadline();
-            questProjector.trigger(questId, deadline);
+            questRepository.trigger(questId, deadline);
             return true;
         }
         return false;

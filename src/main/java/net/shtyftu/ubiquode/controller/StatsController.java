@@ -12,8 +12,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import net.shtyftu.ubiquode.model.QuestPack;
 import net.shtyftu.ubiquode.model.projection.User;
-import net.shtyftu.ubiquode.processor.QuestPackProjector;
-import net.shtyftu.ubiquode.processor.UserProjector;
+import net.shtyftu.ubiquode.processor.QuestPackRepository;
+import net.shtyftu.ubiquode.processor.UserRepository;
 import net.shtyftu.ubiquode.service.QuestStatsService;
 import net.shtyftu.ubiquode.model.view.QuestEventView;
 import org.apache.commons.lang3.EnumUtils;
@@ -32,12 +32,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class StatsController extends AController {
 
     private static final Map<String, Duration> DURATION_MAP = EnumUtils.getEnumMap(Duration.class);
-    private final UserProjector userProjector;
-    private final QuestPackProjector questPackProjector;
+    private final UserRepository userProjector;
+    private final QuestPackRepository questPackProjector;
     private final QuestStatsService questStatsService;
 
     @Autowired
-    public StatsController(UserProjector userProjector, QuestPackProjector questPackProjector,
+    public StatsController(UserRepository userProjector, QuestPackRepository questPackProjector,
             QuestStatsService questStatsService) {
         this.userProjector = userProjector;
         this.questPackProjector = questPackProjector;

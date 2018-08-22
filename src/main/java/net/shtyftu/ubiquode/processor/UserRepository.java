@@ -1,8 +1,6 @@
 package net.shtyftu.ubiquode.processor;
 
-import java.util.UUID;
 import net.shtyftu.ubiquode.dao.list.event.EventDao;
-import net.shtyftu.ubiquode.dao.plain.QuestProtoDao;
 import net.shtyftu.ubiquode.model.persist.composite.event.user.UserAddQuestPackEvent;
 import net.shtyftu.ubiquode.model.persist.composite.event.user.UserEvent;
 import net.shtyftu.ubiquode.model.persist.composite.event.user.UserQuestCompleteEvent;
@@ -15,11 +13,11 @@ import org.springframework.stereotype.Component;
  * @author shtyftu
  */
 @Component
-public class UserProjector extends Projector<User, UserEvent> {
+public class UserRepository extends ARepository<User, UserEvent> {
 
 
     @Autowired
-    public UserProjector(EventDao<UserEvent> eventDao) {
+    public UserRepository(EventDao<UserEvent> eventDao) {
         super(eventDao);
     }
 

@@ -30,6 +30,13 @@
                     <div class="col">Triggered quest</div>
                     <div class="col"><form:checkbox path="activatedByTrigger" name="scores"/></div>
                 </div>
+                <div class="row">
+                    <div class="col">Next quest</div>
+                    <div class="col"><form:select path="nextQuestId" placeholder="">
+                        <form:option value="">&nbsp;</form:option>
+                        <form:options items="${nextQuest}" />
+                    </form:select></div>
+                </div>
             </div>
             <div class="container">
                 <div class="row">

@@ -10,17 +10,16 @@ import javax.annotation.Nullable;
 /**
  * @author shtyftu
  */
-public abstract class Projector<T, E extends AEvent<T>> {
+public abstract class ARepository<T, E extends AEvent<T>> {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private final EventDao<E> eventDao;
 
-    Projector(EventDao<E> eventDao) {
+    ARepository(EventDao<E> eventDao) {
         this.eventDao = eventDao;
     }
 
-    @Nullable
     public T getById(String id) {
         final T result = createNew(id);
         try {
@@ -34,7 +33,7 @@ public abstract class Projector<T, E extends AEvent<T>> {
                 }
             });
         } catch (Exception e) {
-            return null;
+            return createNew("");
         }
         return result;
     }
