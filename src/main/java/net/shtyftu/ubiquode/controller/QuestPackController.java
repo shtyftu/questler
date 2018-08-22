@@ -165,6 +165,9 @@ public class QuestPackController extends AController {
         final QuestPack questPack = ObjectUtils.defaultIfNull(questPackRepository.getById(packId), new QuestPack(null));
         final Map<String, String> nextQuestNamesById = questPack.getProtoIdsByQuestId().entrySet().stream()
                 .filter(e -> !protoId.equals(e.getValue()))
+                .filter(e -> Optional.ofNullable(questProtoDao.getById(e.getValue()))
+                                .map(QuestProto::isActivatedByTrigger).orElse(false)
+                )
                 .collect(Collectors.toMap(
                         Entry::getKey,
                         e -> Optional.ofNullable(questProtoDao.getById(e.getValue()))
