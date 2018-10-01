@@ -85,7 +85,7 @@ public class QuestController extends AController {
             @RequestParam(name = "questId") String questId,
             @RequestParam(name = "packId") String packId) {
         final String userId = getUserId();
-        boolean result = questService.lock(questId, userId, packId);
+        questService.lock(questId, userId, packId);
         return "redirect:/quest" + LIST_PATH;
     }
 

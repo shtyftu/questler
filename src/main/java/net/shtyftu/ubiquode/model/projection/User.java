@@ -20,9 +20,8 @@ public class User extends AModel {
         this.questPackIds = new ArrayList<>();
     }
 
-    public boolean isCanLockQuest() {
-        return lockedQuestId == null
-                && (unableToLockQuestTill == null || System.currentTimeMillis() > unableToLockQuestTill);
+    public Long getUnableToLockQuestTill() {
+        return unableToLockQuestTill;
     }
 
     public String getLockedQuestId() {
