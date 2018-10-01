@@ -17,9 +17,8 @@ public class UserQuestLockEvent extends UserEvent {
 
     @Override
     public void applyTo(User user) {
-        final long now = System.currentTimeMillis();
         user.setLockedQuestId(questId);
-        final long mustCompleteQuestTill = now + ConfigService.QUEST_LOCK_TIME;
+        final long mustCompleteQuestTill = getClusteringId() + ConfigService.QUEST_LOCK_TIME;
         user.setMustCompleteQuestTill(mustCompleteQuestTill);
         user.setUnableToLockQuestTill(mustCompleteQuestTill + ConfigService.UNCOMPLETED_LOCK_PENALTY_TIME);
     }

@@ -109,7 +109,7 @@ public class QuestService {
                 final long millis = System.currentTimeMillis();
                 if (millis < unableToLockQuestTill) {
                     throw new UserUnableToLockException(
-                            Instant.ofEpochSecond(millis).atOffset(ZoneOffset.UTC).toString() + " UTC"
+                            Instant.ofEpochMilli(unableToLockQuestTill).atOffset(ZoneOffset.UTC).toString() + " UTC"
                     );
                 }
             }
